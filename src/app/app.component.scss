@@ -1,0 +1,19 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 40px;
+  cursor: pointer;
+  outline: none;
+
+  .username {
+    font-size: 18px;
+  }
+
+  mat-icon {
+    margin-right: 12px;
+
+    &:last-of-type {
+      margin-right: 0;
+    }
+  }
+}

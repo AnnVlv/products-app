@@ -1,0 +1,22 @@
+.add-block {
+  padding: 0 16px 14px;
+
+  button {
+    display: block;
+    margin-left: auto;
+  }
+}
+
+table {
+  width: 100%;
+
+  .name-value {
+    cursor: pointer;
+  }
+}
+
+.total-block {
+  padding: 28px 16px;
+  display: flex;
+  justify-content: space-between;
+}
