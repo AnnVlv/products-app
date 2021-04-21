@@ -8,7 +8,6 @@ import {environment} from '../../environments/environment';
 @NgModule({
   declarations: [],
   imports: [
-    CommonModule,
     NgxsModule.forRoot([ProductsState], {
       developmentMode: !environment.production
     })

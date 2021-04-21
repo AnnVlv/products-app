@@ -11,7 +11,9 @@ import {Product, ProductsStateModel} from '../models';
   name: 'products',
   defaults: {
     productsIds: [],
-    products: {}
+    products: {},
+    ownersIds: [],
+    owners: {}
   }
 })
 @Injectable()
@@ -26,19 +28,42 @@ export class ProductsState {
   @Action(SetProducts)
   setProducts(ctx: StateContext<ProductsStateModel>, { products, toClean }: { products: Product[],  toClean }): void {
     const state = ctx.getState();
-    const productsObj = { ...(toClean ? {} : state.products) };
+
+    let productIds = [];
+    let productsObj = {};
+    let ownersIds = [];
+    let ownersObj = {};
+
+    if (!toClean) {
+      productIds = [ ...state.productsIds ];
+      productsObj = { ...state.products };
+      ownersIds = [ ...state.ownersIds ];
+      ownersObj = { ...state.owners };
+    }
+
     products.forEach(product => {
-      productsObj[product.id] = product;
+      const productToSave = { ...product };
+      delete productToSave.owner;
+      productsObj[product.id] = productToSave;
       productsObj[product.id].total = product.price *  product.count;
+
+      if (!ownersIds.includes(product.ownerId)) {
+        ownersIds.push(product.ownerId);
+        ownersObj[product.ownerId] = product.owner;
+      }
     });
+
     ctx.setState({
       ...state,
       productsIds: [
-        ...(toClean ? [] : state.productsIds),
+        ...productIds,
         ...products.map(product => product.id)
       ],
-      products: productsObj
+      products: productsObj,
+      ownersIds,
+      owners: ownersObj
     });
+    console.log(ctx.getState());
   }
 
   @Action(GetProducts)
@@ -82,13 +107,20 @@ export class ProductsState {
     return this.productsService.delete(id).pipe(
       tap(() => {
         const state = ctx.getState();
-        const newProducts = { ...state.products };
-        delete newProducts[id];
-        ctx.setState({
-          ...state,
-          productsIds: state.productsIds.filter(productId => productId !== id),
-          products: newProducts
-        });
+
+        const productsIds = state.productsIds.filter(productId => productId !== id);
+        const products = { ...state.products };
+        delete products[id];
+
+        const deletedProductOwnerId = state.products[id].ownerId;
+        let ownersIds = [ ...state.ownersIds ];
+        const owners = { ...state.owners };
+        if (!productsIds.some(productId => state.products[productId].ownerId === deletedProductOwnerId)) {
+          ownersIds = ownersIds.filter(ownerId => ownerId !== deletedProductOwnerId);
+          delete owners[deletedProductOwnerId];
+        }
+
+        ctx.setState({ ...state, productsIds, products, ownersIds, owners });
       })
     );
   }

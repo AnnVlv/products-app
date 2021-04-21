@@ -3,15 +3,8 @@ import {ProductsTableComponent} from './products-table.component';
 import {SharedModule} from '../../shared/shared.module';
 import {DeleteProductModalComponent} from './delete-product-modal/delete-product-modal.component';
 import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
-import {RouterModule, Routes} from '@angular/router';
+import {ProductsTableRoutingModule} from './products-table-routing.module';
 
-
-const routes: Routes = [
-  {
-    path: '',
-    component: ProductsTableComponent
-  }
-];
 
 @NgModule({
   declarations: [
@@ -21,10 +14,7 @@ const routes: Routes = [
   ],
   imports: [
     SharedModule,
-    RouterModule.forChild(routes)
-  ],
-  exports: [
-    RouterModule
+    ProductsTableRoutingModule
   ]
 })
 export class ProductsTableModule { }

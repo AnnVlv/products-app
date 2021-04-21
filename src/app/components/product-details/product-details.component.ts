@@ -54,10 +54,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   edit(): void {
-    this.store.dispatch(new EditProduct({
+    const sub = this.store.dispatch(new EditProduct({
       ...this.form.value,
       id: this.product.id
     })).subscribe(() => this.isEdit = false);
+    this.subs.push(sub);
   }
 
   private buildForm(): void {
