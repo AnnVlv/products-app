@@ -1,11 +1,11 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import {Select, Store} from '@ngxs/store';
-import {EditProduct, GetProductById} from '../../state/product.actions';
 import {Observable, Subscription} from 'rxjs';
-import {Product} from '../../models/product.model';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {EditProduct, GetProductById} from '../../state/product.actions';
+import {Product, Products} from '../../models';
 
 
 @Component({
@@ -21,7 +21,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   subs: Subscription[] = [];
 
-  @Select(state => state.products.products) products$!: Observable<Product[]>;
+  @Select(state => state.products.products) products$!: Observable<Products>;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,7 +42,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       withLatestFrom(this.products$)
     ).subscribe(([_, products]) => {
       this.isReady = true;
-      this.product = products.find(product => product.id === productId);
+      this.product = products[productId];
       this.getProductKeys();
       this.buildForm();
     }, () => this.router.navigate(['/']));
@@ -57,7 +57,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.store.dispatch(new EditProduct({
       ...this.form.value,
       id: this.product.id
-    }));
+    })).subscribe(() => this.isEdit = false);
   }
 
   private buildForm(): void {
@@ -71,8 +71,9 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   private getProductKeys(): void {
+    const notShow = ['id', 'owner', 'ownerId'];
     let keys = Object.keys(this.product);
-    keys = keys.filter(key => key !== 'id');
+    keys = keys.filter(key => !(notShow.includes(key)));
     this.productKeys = keys;
   }
 }

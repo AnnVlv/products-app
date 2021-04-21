@@ -1,3 +1,6 @@
+import {Owner} from './owner.model';
+
+
 export interface Product {
   id: number;
   name: string;
@@ -5,4 +8,6 @@ export interface Product {
   price: number;
   count: number;
   total?: number;
+  ownerId?: number;
+  owner?: Owner;
 }

@@ -1,12 +1,13 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
 import {AddProduct, DeleteProduct, GetProducts} from '../../state/product.actions';
-import {Observable, Subscription} from 'rxjs';
-import {Product} from '../../models/product.model';
+import {combineLatest, Observable, Subscription} from 'rxjs';
+import {Product, Products} from '../../models';
 import {MatDialog} from '@angular/material/dialog';
-import {DeleteProductModalComponent} from '../product-details/delete-product-modal/delete-product-modal.component';
-import {AddProductModalComponent} from '../product-details/add-product-modal/add-product-modal.component';
+import {DeleteProductModalComponent} from './delete-product-modal/delete-product-modal.component';
+import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
 import {Router} from '@angular/router';
+import {ProductsState} from '../../state/poduct.state';
 
 
 @Component({
@@ -15,13 +16,14 @@ import {Router} from '@angular/router';
   styleUrls: ['./products-table.component.scss']
 })
 export class ProductsTableComponent implements OnInit, OnDestroy {
-  products: Product[] = [];
+  productsTableData: Product[] = [];
   isReady = false;
   displayedColumns: string[] = ['name', 'description', 'price', 'count', 'total', 'delete'];
   subs: Subscription[] = [];
 
-  @Select(state => state.products.products) products$!: Observable<Product[]>;
-  @Select(state => state.products.total) total$!: Observable<any>;
+  @Select(state => state.products.products) products$!: Observable<Products>;
+  @Select(state => state.products.productsIds) productsIds$!: Observable<number[]>;
+  @Select(ProductsState.total) total$!: Observable<number>;
 
   constructor(
     public dialog: MatDialog,
@@ -75,8 +77,14 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   }
 
   private subscribeOnState(): void {
-    const sub = this.products$
-      .subscribe(products => this.products = products);
+    const sub = combineLatest(
+      this.products$,
+      this.productsIds$
+    ).subscribe(([products, productsIds]) => {
+      this.productsTableData = [];
+      productsIds.forEach(id => this.productsTableData.push(products[id]));
+    });
+
     this.subs.push(sub);
   }
 

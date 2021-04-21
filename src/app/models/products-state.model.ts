@@ -1,7 +1,7 @@
-import {Product} from './product.model';
+import {Products} from './products.model';
 
 
 export interface ProductsStateModel {
-  products: Product[];
-  total: number;
+  productsIds: number[];
+  products: Products;
 }

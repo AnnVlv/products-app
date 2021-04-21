@@ -1,74 +1,37 @@
 {
   "products": [
     {
-      "name": "Name",
+      "name": "Name 890",
       "description": "Description 1",
       "price": 100,
       "count": 5,
-      "id": 1
+      "id": 1,
+      "ownerId": 1,
+      "owner": {
+        "name":  "Owner's Name"
+      }
     },
     {
+      "name": "Name 890",
+      "description": "Description 1",
+      "price": 100,
+      "count": 5,
       "id": 2,
-      "name": "Name",
-      "description": "Description 1",
-      "price": 20,
-      "count": 5
+      "ownerId": 1,
+      "owner": {
+        "name":  "Owner's Name"
+      }
     },
     {
+      "name": "Name 890",
+      "description": "Description 3",
+      "price": 100,
+      "count": 10,
       "id": 3,
-      "name": "Name",
-      "description": "Description 1",
-      "price": 120,
-      "count": 10
-    },
-    {
-      "id": 4,
-      "name": "Name",
-      "description": "Description 1",
-      "price": 120,
-      "count": 10
-    },
-    {
-      "id": 6,
-      "name": "Name",
-      "description": "Description 1",
-      "price": 10,
-      "count": 10
-    },
-    {
-      "name": "Name Example",
-      "description": "Description Example",
-      "price": 0,
-      "count": 1,
-      "id": 9
-    },
-    {
-      "name": "Name Example",
-      "description": "Description Example",
-      "price": 120,
-      "count": 1,
-      "id": 11
-    },
-    {
-      "name": "Name Example",
-      "description": "Description Example",
-      "price": 120,
-      "count": 1,
-      "id": 12
-    },
-    {
-      "name": "Name Example",
-      "description": "Description Example",
-      "price": 120,
-      "count": 1,
-      "id": 13
-    },
-    {
-      "name": "Name Example",
-      "description": "Description Example",
-      "price": 120,
-      "count": 1,
-      "id": 14
+      "ownerId": 2,
+      "owner": {
+        "name":  "Owner's Name 2"
+      }
     }
   ]
 }

@@ -1,34 +1,51 @@
 import {Injectable} from '@angular/core';
-import {Action, State, StateContext} from '@ngxs/store';
-import {ProductsStateModel} from '../models/products-state.model';
+import {Action, Selector, State, StateContext} from '@ngxs/store';
 import {ProductsService} from '../services/products.service';
-import {AddProduct, CalcTotal, DeleteProduct, EditProduct, GetProductById, GetProducts} from './product.actions';
-import {mergeMap, tap} from 'rxjs/operators';
+import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts, SetProducts} from './product.actions';
+import {tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {Product} from '../models/product.model';
+import {Product, ProductsStateModel} from '../models';
 
 
 @State<ProductsStateModel>({
   name: 'products',
   defaults: {
-    products: [],
-    total: 0
+    productsIds: [],
+    products: {}
   }
 })
 @Injectable()
 export class ProductsState {
   constructor(private productsService: ProductsService) {}
 
+  @Selector([ProductsState])
+  static total({ products, productsIds }: ProductsStateModel): number {
+    return productsIds.reduce((total, id) => total + products[id].total, 0);
+  }
+
+  @Action(SetProducts)
+  setProducts(ctx: StateContext<ProductsStateModel>, { products, toClean }: { products: Product[],  toClean }): void {
+    const state = ctx.getState();
+    const productsObj = { ...(toClean ? {} : state.products) };
+    products.forEach(product => {
+      productsObj[product.id] = product;
+      productsObj[product.id].total = product.price *  product.count;
+    });
+    ctx.setState({
+      ...state,
+      productsIds: [
+        ...(toClean ? [] : state.productsIds),
+        ...products.map(product => product.id)
+      ],
+      products: productsObj
+    });
+  }
+
   @Action(GetProducts)
   getProducts(ctx: StateContext<ProductsStateModel>): Observable<Product[]> {
     return this.productsService.get().pipe(
       tap(products => {
-        const state = ctx.getState();
-        ctx.setState({
-          ...state,
-          products
-        });
-        ctx.dispatch(new CalcTotal());
+        ctx.dispatch(new SetProducts(products, true));
       })
     );
   }
@@ -37,50 +54,42 @@ export class ProductsState {
   getProductById(ctx: StateContext<ProductsStateModel>, { id }: { id: number }): Observable<Product> {
     return this.productsService.getById(id).pipe(
       tap(product => {
-        const state = ctx.getState();
-        ctx.setState({
-          ...state,
-          products: [product]
-        });
-        ctx.dispatch(new CalcTotal());
+        ctx.dispatch(new SetProducts([product], true));
       })
     );
   }
 
-  @Action(CalcTotal)
-  calcTotal(ctx: StateContext<ProductsStateModel>): void {
-    const state = ctx.getState();
-    const newState = {
-      ...state,
-      products: [
-        ...state.products.map(product => ({
-          ...product,
-          total: product.price * product.count
-        }))
-      ],
-    };
-    newState.total = newState.products.reduce((total, product) => total + product.total, 0);
-    ctx.setState(newState);
-  }
-
   @Action(AddProduct)
-  addProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<void> {
+  addProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<Product> {
     return this.productsService.add(product).pipe(
-      mergeMap(() => ctx.dispatch(new GetProducts()))
+      tap(newProduct => {
+        ctx.dispatch(new SetProducts([newProduct], false));
+      })
     );
   }
 
   @Action(EditProduct)
-  editProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<void> {
+  editProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<Product> {
     return this.productsService.edit(product).pipe(
-      mergeMap(() => ctx.dispatch(new GetProducts()))
+      tap(updatedProduct => {
+        ctx.dispatch(new SetProducts([updatedProduct], false));
+      })
     );
   }
 
   @Action(DeleteProduct)
   deleteProduct(ctx: StateContext<ProductsStateModel>, { id }: { id: number }): Observable<void> {
     return this.productsService.delete(id).pipe(
-      mergeMap(() => ctx.dispatch(new GetProducts()))
+      tap(() => {
+        const state = ctx.getState();
+        const newProducts = { ...state.products };
+        delete newProducts[id];
+        ctx.setState({
+          ...state,
+          productsIds: state.productsIds.filter(productId => productId !== id),
+          products: newProducts
+        });
+      })
     );
   }
 }

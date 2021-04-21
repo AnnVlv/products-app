@@ -10,8 +10,9 @@ export class GetProductById {
   constructor(public id: number) {}
 }
 
-export class CalcTotal {
-  static readonly type = '[Product] Calc Total';
+export class SetProducts {
+  static readonly type = '[Product] Set Products';
+  constructor(public products: Product[], public toClean: boolean) {}
 }
 
 export class AddProduct {
