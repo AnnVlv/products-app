@@ -1,16 +1,26 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import {ProductsTableComponent} from './components/products-table/products-table.component';
-import {ProductDetailsComponent} from './components/product-details/product-details.component';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
 
 const routes: Routes = [
-  { path: '', component: ProductsTableComponent },
-  { path: ':id', component:  ProductDetailsComponent }
+  {
+    path: '',
+    loadChildren: () => import('./components/products-table/products-table.module')
+      .then(m => m.ProductsTableModule)
+  },
+  {
+    path: ':id',
+    loadChildren: () => import('./components/product-details/product-details.module')
+      .then(m => m.ProductDetailsModule)
+  }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  imports: [
+    RouterModule.forRoot(routes)
+  ],
+  exports: [
+    RouterModule
+  ]
 })
 export class AppRoutingModule { }

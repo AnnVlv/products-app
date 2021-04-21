@@ -4,8 +4,8 @@ import {AddProduct, DeleteProduct, GetProducts} from '../../state/product.action
 import {Observable, Subscription} from 'rxjs';
 import {Product} from '../../models/product.model';
 import {MatDialog} from '@angular/material/dialog';
-import {DeleteProductModalComponent} from '../delete-product-modal/delete-product-modal.component';
-import {AddProductModalComponent} from '../add-product-modal/add-product-modal.component';
+import {DeleteProductModalComponent} from '../product-details/delete-product-modal/delete-product-modal.component';
+import {AddProductModalComponent} from '../product-details/add-product-modal/add-product-modal.component';
 import {Router} from '@angular/router';
 
 
