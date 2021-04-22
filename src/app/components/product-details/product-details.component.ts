@@ -55,10 +55,17 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   edit(): void {
-    const sub = this.store.dispatch(new EditProduct({
-      ...this.form.value,
-      id: this.product.id
-    })).subscribe(() => this.isEdit = false);
+    const sub = this.store
+      .dispatch(new EditProduct({
+        ...this.form.value,
+        id: this.product.id
+      }))
+      .pipe(withLatestFrom(this.products$)
+      )
+      .subscribe(([_, products]) => {
+        this.product = products.find(product => product.id === this.product.id);
+        this.isEdit = false;
+      });
     this.subs.push(sub);
   }
 
