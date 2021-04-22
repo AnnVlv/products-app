@@ -4,8 +4,9 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {switchMap, tap, withLatestFrom} from 'rxjs/operators';
 import {Select, Store} from '@ngxs/store';
 import {Observable, Subscription} from 'rxjs';
-import {EditProduct, GetProductById} from '../../state/product.actions';
-import {Product, Products} from '../../models';
+import {EditProduct, GetProductById} from '../../state/products/product.actions';
+import {Product} from '../../models';
+import {ProductsState} from '../../state/products/poducts.state';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   subs: Subscription[] = [];
 
-  @Select(state => state.products.products) products$!: Observable<Products>;
+  @Select(ProductsState.products) products$!: Observable<Product[]>;
 
   constructor(
     private route: ActivatedRoute,
@@ -42,7 +43,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       withLatestFrom(this.products$)
     ).subscribe(([_, products]) => {
       this.isReady = true;
-      this.product = products[productId];
+      this.product = products.find(product => product.id === productId);
       this.getProductKeys();
       this.buildForm();
     }, () => this.router.navigate(['/']));

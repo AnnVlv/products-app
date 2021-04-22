@@ -8,6 +8,7 @@
       "id": 1,
       "ownerId": 1,
       "owner": {
+        "id": 1,
         "name": "Owner's Name"
       }
     },
@@ -17,8 +18,9 @@
       "price": 100,
       "count": 5,
       "id": 2,
-      "ownerId": 1,
+      "ownerId": 2,
       "owner": {
+        "id": 2,
         "name": "Owner's Name"
       }
     },
@@ -28,21 +30,23 @@
       "price": 100,
       "count": 5,
       "id": 3,
-      "ownerId": 1,
+      "ownerId": 3,
       "owner": {
+        "id": 3,
         "name": "Owner's Name"
       }
     },
     {
-      "name": "Name 890",
-      "description": "Description 1",
-      "price": 100,
-      "count": 5,
-      "id": 4,
+      "name": "Name Example",
+      "description": "Description Example",
+      "price": 120,
+      "count": 1,
       "ownerId": 2,
       "owner": {
-        "name": "Owner's Name"
-      }
+        "id": 2,
+        "name": "Owner "
+      },
+      "id": 4
     }
   ]
 }

@@ -1,10 +1,9 @@
-import {Products} from './products.model';
-import {Owners} from './owners.model';
+import {Product} from './product.model';
 
 
 export interface ProductsStateModel {
   productsIds: number[];
-  products: Products;
-  ownersIds: number[];
-  owners: Owners;
+  products: {
+    [key: number]: Product;
+  };
 }

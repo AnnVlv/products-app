@@ -1,12 +1,12 @@
 import {Product} from './product.model';
-import {Products} from './products.model';
-import {ProductsStateModel} from './products-state.model';
 import {Owner} from './owner.model';
+import {ProductsStateModel} from './products-state.model';
+import {OwnersStateModel} from './owners-state.model';
 
 
 export {
   Product,
-  Products,
+  Owner,
   ProductsStateModel,
-  Owner
+  OwnersStateModel
 };

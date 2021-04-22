@@ -4,6 +4,14 @@ import {Observable} from 'rxjs';
 import {Product} from '../models';
 
 
+const OWNER_INFO = {
+  ownerId: 2,
+  owner: {
+    id: 2,
+    name: 'Owner'
+  }
+};
+
 const URL = `http://localhost:3000/products`;
 
 @Injectable({
@@ -21,10 +29,18 @@ export class ProductsService {
   }
 
   add(product: Product): Observable<Product> {
+    product = {
+      ...product,
+      ...OWNER_INFO
+    };
     return this.httpClient.post<Product>(URL, { ...product });
   }
 
   edit(product: Product): Observable<Product> {
+    product = {
+      ...product,
+      ...OWNER_INFO
+    };
     return this.httpClient.put<Product>(`${ URL }/${ product.id }`, { ...product });
   }
 

@@ -1,19 +1,18 @@
 import {Injectable} from '@angular/core';
 import {Action, Selector, State, StateContext} from '@ngxs/store';
-import {ProductsService} from '../services/products.service';
+import {ProductsService} from '../../services/products.service';
 import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts, SetProducts} from './product.actions';
 import {tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {Product, ProductsStateModel} from '../models';
+import {Product, ProductsStateModel} from '../../models';
+import {CheckOwnersAfterProductDelete, SetOwners} from '../owners/owners.actions';
 
 
 @State<ProductsStateModel>({
   name: 'products',
   defaults: {
     productsIds: [],
-    products: {},
-    ownersIds: [],
-    owners: {}
+    products: {}
   }
 })
 @Injectable()
@@ -25,20 +24,20 @@ export class ProductsState {
     return productsIds.reduce((total, id) => total + products[id].total, 0);
   }
 
+  @Selector([ProductsState])
+  static products({ products, productsIds }: ProductsStateModel): Product[] {
+    return productsIds.map(productId => products[productId]);
+  }
+
   @Action(SetProducts)
-  setProducts(ctx: StateContext<ProductsStateModel>, { products, toClean }: { products: Product[],  toClean }): void {
+  setProducts(ctx: StateContext<ProductsStateModel>, { products, toClean }: { products: Product[],  toClean: boolean }): void {
     const state = ctx.getState();
 
     let productIds = [];
     let productsObj = {};
-    let ownersIds = [];
-    let ownersObj = {};
-
     if (!toClean) {
       productIds = [ ...state.productsIds ];
       productsObj = { ...state.products };
-      ownersIds = [ ...state.ownersIds ];
-      ownersObj = { ...state.owners };
     }
 
     products.forEach(product => {
@@ -46,11 +45,6 @@ export class ProductsState {
       delete productToSave.owner;
       productsObj[product.id] = productToSave;
       productsObj[product.id].total = product.price *  product.count;
-
-      if (!ownersIds.includes(product.ownerId)) {
-        ownersIds.push(product.ownerId);
-        ownersObj[product.ownerId] = product.owner;
-      }
     });
 
     ctx.setState({
@@ -59,11 +53,11 @@ export class ProductsState {
         ...productIds,
         ...products.map(product => product.id)
       ],
-      products: productsObj,
-      ownersIds,
-      owners: ownersObj
+      products: productsObj
     });
     console.log(ctx.getState());
+
+    ctx.dispatch(new SetOwners(products, toClean));
   }
 
   @Action(GetProducts)
@@ -108,19 +102,14 @@ export class ProductsState {
       tap(() => {
         const state = ctx.getState();
 
+        const productToDelete = state.products[id];
         const productsIds = state.productsIds.filter(productId => productId !== id);
         const products = { ...state.products };
         delete products[id];
 
-        const deletedProductOwnerId = state.products[id].ownerId;
-        let ownersIds = [ ...state.ownersIds ];
-        const owners = { ...state.owners };
-        if (!productsIds.some(productId => state.products[productId].ownerId === deletedProductOwnerId)) {
-          ownersIds = ownersIds.filter(ownerId => ownerId !== deletedProductOwnerId);
-          delete owners[deletedProductOwnerId];
-        }
-
-        ctx.setState({ ...state, productsIds, products, ownersIds, owners });
+        ctx.setState({ ...state, productsIds, products });
+        console.log(ctx.getState());
+        ctx.dispatch(new CheckOwnersAfterProductDelete(productToDelete));
       })
     );
   }

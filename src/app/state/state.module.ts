@@ -1,14 +1,17 @@
 import {NgModule} from '@angular/core';
-import {CommonModule} from '@angular/common';
 import {NgxsModule} from '@ngxs/store';
-import {ProductsState} from './poduct.state';
 import {environment} from '../../environments/environment';
+import {ProductsState} from './products/poducts.state';
+import {OwnersState} from './owners/owners.state';
 
 
 @NgModule({
   declarations: [],
   imports: [
-    NgxsModule.forRoot([ProductsState], {
+    NgxsModule.forRoot([
+      ProductsState,
+      OwnersState
+    ], {
       developmentMode: !environment.production
     })
   ],
