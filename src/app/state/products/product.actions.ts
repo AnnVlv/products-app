@@ -12,7 +12,7 @@ export class GetProductById {
 
 export class SetProducts {
   static readonly type = '[Product] Set Products';
-  constructor(public products: Product[], public toClean: boolean) {}
+  constructor(public products: Product[]) {}
 }
 
 export class AddProduct {

@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Action, State, StateContext, Store} from '@ngxs/store';
-import {OwnersStateModel, Product} from '../../models';
-import {CheckOwnersAfterProductDelete, SetOwners} from './owners.actions';
-import {ProductsState} from '../products/poducts.state';
+import {Action, State, StateContext} from '@ngxs/store';
+import {Owner, OwnersStateModel} from '../../models';
+import {SetOwners} from './owners.actions';
 
 
 @State<OwnersStateModel>({
@@ -14,49 +13,30 @@ import {ProductsState} from '../products/poducts.state';
 })
 @Injectable()
 export class OwnersState {
-  constructor(private store: Store) {}
-
   @Action(SetOwners)
-  addOwners(ctx: StateContext<OwnersStateModel>, { products, toClean }: { products: Product[], toClean: boolean }): void {
+  addOwners(ctx: StateContext<OwnersStateModel>, { owners }: { owners: Owner[] }): void {
     const state = ctx.getState();
 
-    let ownersIds = [];
-    let ownersObj = {};
-    if (!toClean) {
-      ownersIds = [ ...state.ownersIds ];
-      ownersObj = { ...state.owners };
-    }
+    const ownersIds = [...new Set([
+      ...state.ownersIds,
+      ...owners.map(owner => owner.id)])
+    ];
 
-    products.forEach(product => {
-      if (!ownersIds.includes(product.ownerId)) {
-        ownersIds.push(product.ownerId);
-        ownersObj[product.ownerId] = product.owner;
-      }
-    });
+    const newOwnersArr = owners.map(owner => ({
+      [owner.id]: owner
+    }));
 
-    ctx.setState({
-      ...state,
+    const ownersObj = newOwnersArr.reduce((acc, owner) => {
+      const [id] = Object.keys(owner);
+      return {
+        ...acc,
+        [id]: owner[id]
+      };
+    }, {});
+
+    ctx.patchState({
       ownersIds,
       owners: ownersObj
     });
-    console.log(ctx.getState());
-  }
-
-  @Action(CheckOwnersAfterProductDelete)
-  checkOwnersAfterProductDelete(ctx: StateContext<OwnersStateModel>, { product }: { product: Product }): void {
-    const state = ctx.getState();
-    const products = this.store.selectSnapshot(ProductsState.products);
-
-    const deletedProductOwnerId = product.ownerId;
-    let ownersIds = [ ...state.ownersIds ];
-    const owners = { ...state.owners };
-
-    if (!products.some(p => p.ownerId === deletedProductOwnerId)) {
-      ownersIds = ownersIds.filter(ownerId => ownerId !== deletedProductOwnerId);
-      delete owners[deletedProductOwnerId];
-    }
-
-    ctx.setState({ ...state, ownersIds, owners });
-    console.log(ctx.getState());
   }
 }

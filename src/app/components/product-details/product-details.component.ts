@@ -6,7 +6,7 @@ import {Select, Store} from '@ngxs/store';
 import {Observable, Subscription} from 'rxjs';
 import {EditProduct, GetProductById} from '../../state/products/product.actions';
 import {Product} from '../../models';
-import {ProductsState} from '../../state/products/poducts.state';
+import {ProductsStateGetter} from '../../state/products/products.getter';
 
 
 @Component({
@@ -22,7 +22,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   form: FormGroup;
   subs: Subscription[] = [];
 
-  @Select(ProductsState.products) products$!: Observable<Product[]>;
+  @Select(ProductsStateGetter.products) products$!: Observable<Product[]>;
 
   constructor(
     private route: ActivatedRoute,

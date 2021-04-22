@@ -7,7 +7,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {DeleteProductModalComponent} from './delete-product-modal/delete-product-modal.component';
 import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
 import {Router} from '@angular/router';
-import {ProductsState} from '../../state/products/poducts.state';
+import {ProductsStateGetter} from '../../state/products/products.getter';
 
 
 @Component({
@@ -21,8 +21,8 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = ['name', 'description', 'price', 'count', 'total', 'delete'];
   subs: Subscription[] = [];
 
-  @Select(ProductsState.products) products$!: Observable<Product[]>;
-  @Select(ProductsState.total) total$!: Observable<number>;
+  @Select(ProductsStateGetter.products) products$!: Observable<Product[]>;
+  @Select(ProductsStateGetter.total) total$!: Observable<number>;
 
   constructor(
     public dialog: MatDialog,

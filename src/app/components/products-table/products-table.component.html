@@ -43,9 +43,13 @@
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-    <div class="total-block">
+    <div class="table-info">
       <div>Total</div>
       <div>{{ total$ | async }}</div>
+    </div>
+    <div class="table-info">
+      <div>Count</div>
+      <div>{{ products.length }}</div>
     </div>
   </ng-container>
 
