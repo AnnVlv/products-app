@@ -28,7 +28,10 @@ export class ProductsState {
       ...state.productsIds
     ])];
 
-    const { owners, newProducts } = products.reduce((acc, product) => {
+    const { owners, newProducts } = products.reduce<{
+      owners: Owner[],
+      newProducts: ProductsStateModel['products']
+    }>((acc, product) => {
       const { owner, ...newProduct } = product;
       return {
         ...acc,
@@ -45,8 +48,8 @@ export class ProductsState {
         }
       };
     }, {
-      owners: [] as Owner[],
-      newProducts: {} as ProductsStateModel['products']
+      owners: [],
+      newProducts: {}
     });
 
     ctx.patchState({
