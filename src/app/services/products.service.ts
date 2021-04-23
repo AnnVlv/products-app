@@ -12,7 +12,7 @@ const OWNER_INFO = {
   }
 };
 
-const URL = `http://localhost:3000/products`;
+const URL = `products`;
 
 @Injectable({
   providedIn: 'root'

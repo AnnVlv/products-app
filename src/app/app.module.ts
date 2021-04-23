@@ -4,8 +4,10 @@ import {SharedModule} from './shared/shared.module';
 import {StateModule} from './state/state.module';
 import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+import {BaseUrlInterceptor} from './services/interceptors/base-url.interceptor';
+import {ToastModule} from './components/toast/toast.module';
 
 
 @NgModule({
@@ -18,9 +20,16 @@ import {NoopAnimationsModule} from '@angular/platform-browser/animations';
     NoopAnimationsModule,
     AppRoutingModule,
     SharedModule,
-    StateModule
+    StateModule,
+    ToastModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: BaseUrlInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [
     AppComponent
   ]

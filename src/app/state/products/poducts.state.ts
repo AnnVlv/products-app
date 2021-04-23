@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Action, State, StateContext} from '@ngxs/store';
 import {ProductsService} from '../../services/products.service';
 import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts, SetProducts} from './product.actions';
-import {tap} from 'rxjs/operators';
+import {switchMap, tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
 import {Owner, Product, ProductsStateModel} from '../../models';
 import {SetOwners} from '../owners/owners.actions';
@@ -46,7 +46,7 @@ export class ProductsState {
       };
     }, {
       owners: [] as Owner[],
-      newProducts: {} as { [key: number]: Product }
+      newProducts: {} as ProductsStateModel['products']
     });
 
     ctx.patchState({
@@ -61,38 +61,30 @@ export class ProductsState {
   }
 
   @Action(GetProducts)
-  getProducts(ctx: StateContext<ProductsStateModel>): Observable<Product[]> {
+  getProducts(ctx: StateContext<ProductsStateModel>): Observable<void> {
     return this.productsService.get().pipe(
-      tap(products => {
-        ctx.dispatch(new SetProducts(products));
-      })
+      switchMap(products => ctx.dispatch(new SetProducts(products)))
     );
   }
 
   @Action(GetProductById)
-  getProductById(ctx: StateContext<ProductsStateModel>, { id }: { id: number }): Observable<Product> {
+  getProductById(ctx: StateContext<ProductsStateModel>, { id }: { id: number }): Observable<void> {
     return this.productsService.getById(id).pipe(
-      tap(product => {
-        ctx.dispatch(new SetProducts([product]));
-      })
+      switchMap(product => ctx.dispatch(new SetProducts([product])))
     );
   }
 
   @Action(AddProduct)
-  addProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<Product> {
+  addProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<void> {
     return this.productsService.add(product).pipe(
-      tap(newProduct => {
-        ctx.dispatch(new SetProducts([newProduct]));
-      })
+      switchMap(newProduct => ctx.dispatch(new SetProducts([newProduct])))
     );
   }
 
   @Action(EditProduct)
-  editProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<Product> {
+  editProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<void> {
     return this.productsService.edit(product).pipe(
-      tap(updatedProduct => {
-        ctx.dispatch(new SetProducts([updatedProduct]));
-      })
+      switchMap(updatedProduct => ctx.dispatch(new SetProducts([updatedProduct])))
     );
   }
 
