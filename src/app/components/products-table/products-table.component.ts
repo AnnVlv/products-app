@@ -8,6 +8,7 @@ import {DeleteProductModalComponent} from './delete-product-modal/delete-product
 import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
 import {Router} from '@angular/router';
 import {ProductsStateGetter} from '../../state/products/products.getter';
+import {OWNER_INFO} from '../../services/products.service';
 
 
 @Component({
@@ -64,7 +65,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
       if (result) {
         this.isReady = false;
         const sub = this.store
-          .dispatch(new AddProduct(result))
+          .dispatch(new AddProduct({ ...result, ...OWNER_INFO }))
           .subscribe(() => this.isReady = true);
         this.subs.push(sub);
       }

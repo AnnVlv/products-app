@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {Product} from '../models';
 
 
-const OWNER_INFO = {
+export const OWNER_INFO = {
   ownerId: 2,
   owner: {
     id: 2,
@@ -37,10 +37,6 @@ export class ProductsService {
   }
 
   edit(product: Product): Observable<Product> {
-    product = {
-      ...product,
-      ...OWNER_INFO
-    };
     return this.httpClient.put<Product>(`${ ProductsService.URL }/${ product.id }`, { ...product });
   }
 

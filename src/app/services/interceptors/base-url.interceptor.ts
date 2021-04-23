@@ -13,7 +13,9 @@ export class BaseUrlInterceptor implements HttpInterceptor {
   constructor(private toastService: ToastService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    const newRequest = new HttpRequest(request.method as any, `${ this.BASE_URL }/${ request.url }`);
+    const newRequest = request.clone({
+      url: `${ this.BASE_URL }/${ request.url }`
+    });
     return next.handle(newRequest)
       .pipe(catchError((error) => {
         this.toastService.show(`Something went wrong`);

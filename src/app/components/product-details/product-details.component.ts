@@ -7,6 +7,7 @@ import {Observable, Subscription} from 'rxjs';
 import {EditProduct, GetProductById} from '../../state/products/product.actions';
 import {Product} from '../../models';
 import {ProductsStateGetter} from '../../state/products/products.getter';
+import {OWNER_INFO} from '../../services/products.service';
 
 
 @Component({
@@ -58,7 +59,8 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     const sub = this.store
       .dispatch(new EditProduct({
         ...this.form.value,
-        id: this.product.id
+        id: this.product.id,
+        ...OWNER_INFO
       }))
       .pipe(withLatestFrom(this.products$)
       )

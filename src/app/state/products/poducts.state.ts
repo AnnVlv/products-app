@@ -67,6 +67,7 @@ export class ProductsState {
         ...newProducts
       }
     });
+    console.log(ctx.getState());
 
     ctx.dispatch(new SetOwners(owners));
   }
@@ -88,7 +89,7 @@ export class ProductsState {
   @Action(AddProduct)
   addProduct(ctx: StateContext<ProductsStateModel>, { product }: AddProduct): Observable<void> {
     return this.productsService.add(product).pipe(
-      switchMap(newProduct => ctx.dispatch(new SetProducts([newProduct])))
+      switchMap(({ id }) => ctx.dispatch(new SetProducts([{  ...product, id }])))
     );
   }
 
