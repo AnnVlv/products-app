@@ -4,7 +4,7 @@ import {ProductsService} from '../../services/products.service';
 import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts, SetProducts} from './product.actions';
 import {tap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {Product, ProductsStateModel} from '../../models';
+import {Owner, Product, ProductsStateModel} from '../../models';
 import {SetOwners} from '../owners/owners.actions';
 
 
@@ -28,7 +28,7 @@ export class ProductsState {
       ...state.productsIds
     ])];
 
-    const { owners, newProductsArr } = products.reduce((acc, product) => {
+    const { owners, newProducts } = products.reduce((acc, product) => {
       const { owner, ...newProduct } = product;
       return {
         ...acc,
@@ -36,28 +36,18 @@ export class ProductsState {
           ...acc.owners,
           owner
         ],
-        newProductsArr: [
-          ...acc.newProductsArr,
-          {
-            [newProduct.id]: {
-              ...newProduct,
-              total: newProduct.price *  newProduct.count
-            }
+        newProducts: {
+          ...acc.newProducts,
+          [newProduct.id]: {
+            ...newProduct,
+            total: product.price * product.count
           }
-        ]
+        }
       };
     }, {
-      owners: [],
-      newProductsArr: []
+      owners: [] as Owner[],
+      newProducts: {} as { [key: number]: Product }
     });
-
-    const newProducts = newProductsArr.reduce((acc, product) => {
-      const id = Object.keys(product).find(key => productsIds.includes(+key));
-      return {
-        ...acc,
-        [id]: product[id]
-      };
-    }, {});
 
     ctx.patchState({
       productsIds,
