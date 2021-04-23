@@ -1,10 +1,19 @@
 import {Injectable} from '@angular/core';
 import {Action, State, StateContext} from '@ngxs/store';
 import {ProductsService} from '../../services/products.service';
-import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts, SetProducts} from './product.actions';
-import {switchMap, tap} from 'rxjs/operators';
+import {
+  AddProduct,
+  DeleteProduct,
+  DeleteProductFail,
+  DeleteProductSuccess,
+  EditProduct,
+  GetProductById,
+  GetProducts,
+  SetProducts
+} from './product.actions';
+import {catchError, switchMap} from 'rxjs/operators';
 import {Observable} from 'rxjs';
-import {Owner, Product, ProductsStateModel} from '../../models';
+import {Owner, ProductsStateModel} from '../../models';
 import {SetOwners} from '../owners/owners.actions';
 
 
@@ -20,7 +29,7 @@ export class ProductsState {
   constructor(private productsService: ProductsService) {}
 
   @Action(SetProducts)
-  setProducts(ctx: StateContext<ProductsStateModel>, { products }: { products: Product[] }): void {
+  setProducts(ctx: StateContext<ProductsStateModel>, { products }: SetProducts): void {
     const state = ctx.getState();
 
     const productsIds = [...new Set([
@@ -34,7 +43,6 @@ export class ProductsState {
     }>((acc, product) => {
       const { owner, ...newProduct } = product;
       return {
-        ...acc,
         owners: [
           ...acc.owners,
           owner
@@ -71,34 +79,38 @@ export class ProductsState {
   }
 
   @Action(GetProductById)
-  getProductById(ctx: StateContext<ProductsStateModel>, { id }: { id: number }): Observable<void> {
+  getProductById(ctx: StateContext<ProductsStateModel>, { id }: GetProductById): Observable<void> {
     return this.productsService.getById(id).pipe(
       switchMap(product => ctx.dispatch(new SetProducts([product])))
     );
   }
 
   @Action(AddProduct)
-  addProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<void> {
+  addProduct(ctx: StateContext<ProductsStateModel>, { product }: AddProduct): Observable<void> {
     return this.productsService.add(product).pipe(
       switchMap(newProduct => ctx.dispatch(new SetProducts([newProduct])))
     );
   }
 
   @Action(EditProduct)
-  editProduct(ctx: StateContext<ProductsStateModel>, { product }: { product: Product }): Observable<void> {
+  editProduct(ctx: StateContext<ProductsStateModel>, { product }: EditProduct): Observable<void> {
     return this.productsService.edit(product).pipe(
       switchMap(updatedProduct => ctx.dispatch(new SetProducts([updatedProduct])))
     );
   }
 
   @Action(DeleteProduct)
-  deleteProduct(ctx: StateContext<ProductsStateModel>, { id }: { id: number }): Observable<void> {
+  deleteProduct(ctx: StateContext<ProductsStateModel>, { id }: DeleteProduct): Observable<void> {
     return this.productsService.delete(id).pipe(
-      tap(() => {
-        const state = ctx.getState();
-        const productsIds = state.productsIds.filter(productId => productId !== id);
-        ctx.patchState({ productsIds });
-      })
+      switchMap(() => ctx.dispatch(new DeleteProductSuccess(id))),
+      catchError(() => ctx.dispatch(new DeleteProductFail()))
     );
+  }
+
+  @Action(DeleteProductSuccess)
+  deleteProductSuccess(ctx: StateContext<ProductsStateModel>, { id }: DeleteProduct): void {
+    const state = ctx.getState();
+    const productsIds = state.productsIds.filter(productId => productId !== id);
+    ctx.patchState({ productsIds });
   }
 }
