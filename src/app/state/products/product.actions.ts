@@ -29,3 +29,12 @@ export class DeleteProduct {
   static readonly type = '[Product] Delete Product';
   constructor(public id: number) {}
 }
+
+export class DeleteProductSuccess {
+  static readonly type = '[Product] Delete Product Success';
+  constructor(public id: number) {}
+}
+
+export class DeleteProductFail {
+  static readonly type = '[Product] Delete Product Fail';
+}

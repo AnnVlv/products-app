@@ -12,20 +12,20 @@ const OWNER_INFO = {
   }
 };
 
-const URL = `products`;
-
 @Injectable({
   providedIn: 'root'
 })
 export class ProductsService {
+  static URL = `products`;
+
   constructor(private httpClient: HttpClient) { }
 
   get(): Observable<Product[]> {
-    return this.httpClient.get<Product[]>(URL);
+    return this.httpClient.get<Product[]>(ProductsService.URL);
   }
 
   getById(id: number): Observable<Product> {
-    return this.httpClient.get<Product>(`${ URL }/${id}`);
+    return this.httpClient.get<Product>(`${ ProductsService.URL }/${ id }`);
   }
 
   add(product: Product): Observable<Product> {
@@ -33,7 +33,7 @@ export class ProductsService {
       ...product,
       ...OWNER_INFO
     };
-    return this.httpClient.post<Product>(URL, { ...product });
+    return this.httpClient.post<Product>(ProductsService.URL, { ...product });
   }
 
   edit(product: Product): Observable<Product> {
@@ -41,10 +41,10 @@ export class ProductsService {
       ...product,
       ...OWNER_INFO
     };
-    return this.httpClient.put<Product>(`${ URL }/${ product.id }`, { ...product });
+    return this.httpClient.put<Product>(`${ ProductsService.URL }/${ product.id }`, { ...product });
   }
 
   delete(id: number): Observable<null> {
-    return this.httpClient.delete<null>(`${URL}/${id}`);
+    return this.httpClient.delete<null>(`${ ProductsService.URL }/${ id }`);
   }
 }
