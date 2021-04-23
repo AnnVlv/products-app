@@ -23,31 +23,41 @@ export class ProductsState {
   setProducts(ctx: StateContext<ProductsStateModel>, { products }: { products: Product[] }): void {
     const state = ctx.getState();
 
-    const owners = [];
-    const newProductsArr = products.map(product => {
-      const { owner, ...newProduct } = product;
-      owners.push(owner);
+    const productsIds = [...new Set([
+      ...products.map(product => product.id),
+      ...state.productsIds
+    ])];
 
+    const { owners, newProductsArr } = products.reduce((acc, product) => {
+      const { owner, ...newProduct } = product;
       return {
-        [newProduct.id]: {
-          ...newProduct,
-          total: newProduct.price *  newProduct.count,
-        }
+        ...acc,
+        owners: [
+          ...acc.owners,
+          owner
+        ],
+        newProductsArr: [
+          ...acc.newProductsArr,
+          {
+            [newProduct.id]: {
+              ...newProduct,
+              total: newProduct.price *  newProduct.count
+            }
+          }
+        ]
       };
+    }, {
+      owners: [],
+      newProductsArr: []
     });
 
     const newProducts = newProductsArr.reduce((acc, product) => {
-      const [id] = Object.keys(product);
+      const id = Object.keys(product).find(key => productsIds.includes(+key));
       return {
         ...acc,
         [id]: product[id]
       };
     }, {});
-
-    const productsIds = [...new Set([
-      ...products.map(product => product.id),
-      ...state.productsIds]),
-    ];
 
     ctx.patchState({
       productsIds,

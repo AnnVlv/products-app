@@ -19,15 +19,15 @@ export class OwnersState {
 
     const ownersIds = [...new Set([
       ...state.ownersIds,
-      ...owners.map(owner => owner.id)])
-    ];
+      ...owners.map(owner => owner.id)
+    ])];
 
     const newOwnersArr = owners.map(owner => ({
       [owner.id]: owner
     }));
 
     const ownersObj = newOwnersArr.reduce((acc, owner) => {
-      const [id] = Object.keys(owner);
+      const id = Object.keys(owner).find(key => ownersIds.includes(+key));
       return {
         ...acc,
         [id]: owner[id]
