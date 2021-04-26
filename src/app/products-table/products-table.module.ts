@@ -2,18 +2,20 @@ import {NgModule} from '@angular/core';
 
 import {ProductsTableComponent} from './products-table.component';
 import {ProductsTableRoutingModule} from './products-table-routing.module';
-import {ProductsTableSharedModule} from './shared/products-table-shared.module';
 import {SharedModule} from '../shared/shared.module';
+import {AddProductModalModule} from './shared/components/add-product-modal/add-product-modal.module';
+import {DeleteProductModalModule} from './shared/components/delete-product-modal/delete-product-modal.module';
 
 
 @NgModule({
   declarations: [
-    ProductsTableComponent,
+    ProductsTableComponent
   ],
   imports: [
     SharedModule,
     ProductsTableRoutingModule,
-    ProductsTableSharedModule
+    AddProductModalModule,
+    DeleteProductModalModule
   ]
 })
 export class ProductsTableModule { }

@@ -1,14 +1,16 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Select, Store} from '@ngxs/store';
-import {AddProduct, DeleteProduct, GetProducts} from '../state/products/product.actions';
-import {Observable, Subscription} from 'rxjs';
-import {Product} from '../shared/models';
-import {MatDialog} from '@angular/material/dialog';
-import {DeleteProductModalComponent} from './shared/components/delete-product-modal/delete-product-modal.component';
-import {AddProductModalComponent} from './shared/components/add-product-modal/add-product-modal.component';
 import {Router} from '@angular/router';
+import {MatDialog} from '@angular/material/dialog';
+import {Observable, Subscription} from 'rxjs';
+import {Select, Store} from '@ngxs/store';
+
+import {AddProduct, DeleteProduct, GetProducts} from '../state/products/product.actions';
+import {Product} from '../shared/models';
 import {ProductsStateGetter} from '../state/products/products.getter';
 import {OWNER_INFO} from '../core/services/products.service';
+import {ToastService} from '../core/services';
+import {DeleteProductModalComponent} from './shared/components/delete-product-modal/delete-product-modal.component';
+import {AddProductModalComponent} from './shared/components/add-product-modal/add-product-modal.component';
 
 
 @Component({
@@ -28,7 +30,8 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     private store: Store,
-    private router: Router
+    private router: Router,
+    private toastService: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -74,6 +77,10 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
 
   openDetailsPage(id: number): void {
     this.router.navigate(['/', id]);
+  }
+
+  showError(): void {
+    this.toastService.show(`Showing error... # ${ Math.round(Math.random() * 100) }`);
   }
 
   private subscribeOnState(): void {
