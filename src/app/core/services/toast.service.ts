@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Subject, timer} from 'rxjs';
-import {filter, repeatWhen, withLatestFrom} from 'rxjs/operators';
+import {Subject} from 'rxjs';
+import {debounceTime, filter} from 'rxjs/operators';
 
 
 @Injectable({
@@ -10,10 +10,9 @@ export class ToastService {
   message$: Subject<string> = new Subject<string>();
 
   constructor() {
-    timer(3000).pipe(
-      repeatWhen(() => this.message$),
-      withLatestFrom(this.message$),
-      filter(([_, message]) => !!message)
+    this.message$.pipe(
+      filter(message => !!message),
+      debounceTime(3000)
     ).subscribe(() => {
       this.message$.next('');
     });
