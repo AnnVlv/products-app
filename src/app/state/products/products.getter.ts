@@ -1,6 +1,7 @@
-import {Product, ProductsStateModel} from '../../models';
-import {ProductsState} from './poducts.state';
 import {Selector} from '@ngxs/store';
+
+import {Product, ProductsStateModel} from '../../shared/models';
+import {ProductsState} from './poducts.state';
 
 
 export class ProductsStateGetter {

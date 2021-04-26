@@ -1,4 +1,4 @@
-import {Product} from '../../models';
+import {Product} from '../../shared/models';
 
 
 export class GetProducts {

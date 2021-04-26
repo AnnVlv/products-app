@@ -1,7 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Product} from '../models';
+
+import {Product} from '../../shared/models';
 
 
 export const OWNER_INFO = {

@@ -5,12 +5,12 @@ import {RouterModule, Routes} from '@angular/router';
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./components/products-table/products-table.module')
+    loadChildren: () => import('./products-table/products-table.module')
       .then(m => m.ProductsTableModule)
   },
   {
     path: ':id',
-    loadChildren: () => import('./components/product-details/product-details.module')
+    loadChildren: () => import('./product-details/product-details.module')
       .then(m => m.ProductDetailsModule)
   }
 ];

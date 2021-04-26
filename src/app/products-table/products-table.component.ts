@@ -1,14 +1,14 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Select, Store} from '@ngxs/store';
-import {AddProduct, DeleteProduct, GetProducts} from '../../state/products/product.actions';
+import {AddProduct, DeleteProduct, GetProducts} from '../state/products/product.actions';
 import {Observable, Subscription} from 'rxjs';
-import {Product} from '../../models';
+import {Product} from '../shared/models';
 import {MatDialog} from '@angular/material/dialog';
-import {DeleteProductModalComponent} from './delete-product-modal/delete-product-modal.component';
-import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
+import {DeleteProductModalComponent} from './shared/components/delete-product-modal/delete-product-modal.component';
+import {AddProductModalComponent} from './shared/components/add-product-modal/add-product-modal.component';
 import {Router} from '@angular/router';
-import {ProductsStateGetter} from '../../state/products/products.getter';
-import {OWNER_INFO} from '../../services/products.service';
+import {ProductsStateGetter} from '../state/products/products.getter';
+import {OWNER_INFO} from '../core/services/products.service';
 
 
 @Component({

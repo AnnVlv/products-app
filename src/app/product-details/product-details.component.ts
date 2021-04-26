@@ -2,12 +2,13 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {switchMap, tap, withLatestFrom} from 'rxjs/operators';
-import {Select, Store} from '@ngxs/store';
 import {Observable, Subscription} from 'rxjs';
-import {EditProduct, GetProductById} from '../../state/products/product.actions';
-import {Product} from '../../models';
-import {ProductsStateGetter} from '../../state/products/products.getter';
-import {OWNER_INFO} from '../../services/products.service';
+import {Select, Store} from '@ngxs/store';
+
+import {EditProduct, GetProductById} from '../state/products/product.actions';
+import {Product} from '../shared/models';
+import {ProductsStateGetter} from '../state/products/products.getter';
+import {OWNER_INFO} from '../core/services/products.service';
 
 
 @Component({

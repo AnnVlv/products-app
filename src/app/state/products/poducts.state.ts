@@ -1,6 +1,9 @@
 import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {catchError, switchMap} from 'rxjs/operators';
 import {Action, State, StateContext} from '@ngxs/store';
-import {ProductsService} from '../../services/products.service';
+
+import {ProductsService} from '../../core/services/products.service';
 import {
   AddProduct,
   DeleteProduct,
@@ -11,9 +14,7 @@ import {
   GetProducts,
   SetProducts
 } from './product.actions';
-import {catchError, switchMap} from 'rxjs/operators';
-import {Observable} from 'rxjs';
-import {Owner, ProductsStateModel} from '../../models';
+import {Owner, ProductsStateModel} from '../../shared/models';
 import {SetOwners} from '../owners/owners.actions';
 
 
@@ -67,7 +68,6 @@ export class ProductsState {
         ...newProducts
       }
     });
-    console.log(ctx.getState());
 
     ctx.dispatch(new SetOwners(owners));
   }

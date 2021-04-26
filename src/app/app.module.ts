@@ -1,13 +1,13 @@
 import {NgModule} from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {NoopAnimationsModule} from '@angular/platform-browser/animations';
+
 import {AppComponent} from './app.component';
 import {SharedModule} from './shared/shared.module';
 import {StateModule} from './state/state.module';
-import {BrowserModule} from '@angular/platform-browser';
 import {AppRoutingModule} from './app-routing.module';
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
-import {NoopAnimationsModule} from '@angular/platform-browser/animations';
-import {BaseUrlInterceptor} from './services/interceptors/base-url.interceptor';
-import {ToastModule} from './components/toast/toast.module';
+import {BaseUrlInterceptor} from './core/interceptors/base-url.interceptor';
 
 
 @NgModule({
@@ -20,8 +20,7 @@ import {ToastModule} from './components/toast/toast.module';
     NoopAnimationsModule,
     AppRoutingModule,
     SharedModule,
-    StateModule,
-    ToastModule
+    StateModule
   ],
   providers: [
     {

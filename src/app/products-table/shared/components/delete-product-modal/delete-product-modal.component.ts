@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 
+
 @Component({
   selector: 'app-delete-product-modal',
   templateUrl: './delete-product-modal.component.html',

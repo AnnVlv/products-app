@@ -1,5 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
-import {ToastService} from '../../services/toast.service';
+
+import {ToastService} from '../../../core/services/toast.service';
 
 
 @Component({

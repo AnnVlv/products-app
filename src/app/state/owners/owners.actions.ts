@@ -1,4 +1,4 @@
-import {Owner} from '../../models';
+import {Owner} from '../../shared/models';
 
 
 export class SetOwners {

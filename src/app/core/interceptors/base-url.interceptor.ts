@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpInterceptor, HttpRequest, HttpHandler, HttpEvent} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
-import {ToastService} from '../toast.service';
+
 import {environment} from '../../../environments/environment';
+import {ToastService} from '../services/toast.service';
 
 
 @Injectable()
