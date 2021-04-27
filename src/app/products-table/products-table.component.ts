@@ -1,6 +1,6 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {MatDialog} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Observable, Subject, Subscription} from 'rxjs';
 import {switchMap} from 'rxjs/operators';
 
@@ -23,7 +23,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   total$: Observable<number>;
   isLoading$: Observable<boolean>;
-  deleteModal$: Subject<any> = new Subject<any>();
+  deleteModal$: Subject<MatDialogRef<DeleteProductModalComponent>> = new Subject<MatDialogRef<DeleteProductModalComponent>>();
 
   constructor(
     public dialog: MatDialog,
@@ -42,10 +42,8 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     this.productsProviderService.getProducts();
 
     this.deleteModal$.pipe(
-      switchMap(closed => closed)
-    ).subscribe(() => {
-      // after closed
-    });
+      switchMap(closed => closed.afterClosed())
+    ).subscribe(() => {});
   }
 
   ngOnDestroy(): void {
@@ -57,7 +55,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
       width: '250px',
       data: id
     });
-    this.deleteModal$.next(dialogRef.afterClosed());
+    this.deleteModal$.next(dialogRef);
   }
 
   openAddModal(): void {
