@@ -7,7 +7,7 @@ import {Select, Store} from '@ngxs/store';
 import {AddProduct, DeleteProduct, GetProducts} from '../state/products/product.actions';
 import {Product} from '../shared/models';
 import {ProductsStateGetter} from '../state/products/products.getter';
-import {OWNER_INFO} from '../core/services/products.service';
+import {OWNER_INFO, ProductsService} from '../core/services/products.service';
 import {ToastService} from '../core/services';
 import {DeleteProductModalComponent} from './shared/components/delete-product-modal/delete-product-modal.component';
 import {AddProductModalComponent} from './shared/components/add-product-modal/add-product-modal.component';
@@ -20,9 +20,9 @@ import {AddProductModalComponent} from './shared/components/add-product-modal/ad
 })
 export class ProductsTableComponent implements OnInit, OnDestroy {
   products: Product[] = [];
-  isReady = false;
   displayedColumns: string[] = ['name', 'description', 'price', 'count', 'total', 'delete'];
-  subs: Subscription[] = [];
+  subscription: Subscription;
+  isLoading$: Observable<boolean>;
 
   @Select(ProductsStateGetter.products) products$!: Observable<Product[]>;
   @Select(ProductsStateGetter.total) total$!: Observable<number>;
@@ -35,12 +35,16 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscribeOnState();
-    this.getProducts();
+    this.isLoading$ = ProductsService.isLoading$;
+
+    this.subscription = this.products$
+      .subscribe(products => this.products = products);
+
+    this.store.dispatch(new GetProducts());
   }
 
   ngOnDestroy(): void {
-    this.subs.forEach(sub => sub.unsubscribe());
+    this.subscription.unsubscribe();
   }
 
   openDeleteModal(id: number): void {
@@ -48,14 +52,11 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
       width: '250px'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    const sub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.isReady = false;
-        const sub = this.store
-          .dispatch(new DeleteProduct(id))
-          .subscribe(() => this.isReady = true);
-        this.subs.push(sub);
+        this.store.dispatch(new DeleteProduct(id));
       }
+      sub.unsubscribe();
     });
   }
 
@@ -64,14 +65,11 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
       width: '400px'
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    const sub = dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.isReady = false;
-        const sub = this.store
-          .dispatch(new AddProduct({ ...result, ...OWNER_INFO }))
-          .subscribe(() => this.isReady = true);
-        this.subs.push(sub);
+        this.store.dispatch(new AddProduct({ ...result, ...OWNER_INFO }));
       }
+      sub.unsubscribe();
     });
   }
 
@@ -81,18 +79,5 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
 
   showError(): void {
     this.toastService.show(`Showing error... # ${ Math.round(Math.random() * 100) }`);
-  }
-
-  private subscribeOnState(): void {
-    const sub = this.products$
-      .subscribe(products => this.products = products);
-    this.subs.push(sub);
-  }
-
-  private getProducts(): void {
-    const sub = this.store
-      .dispatch(new GetProducts())
-      .subscribe(() => this.isReady = true);
-    this.subs.push(sub);
   }
 }

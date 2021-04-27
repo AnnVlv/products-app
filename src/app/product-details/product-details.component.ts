@@ -22,7 +22,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   isReady = false;
   isEdit = false;
   form: FormGroup;
-  subs: Subscription[] = [];
+  subscription: Subscription;
 
   @Select(ProductsStateGetter.products) products$!: Observable<Product[]>;
 
@@ -34,7 +34,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     let productId;
-    const sub = this.route.params.pipe(
+    this.subscription = this.route.params.pipe(
       tap(({ id }) => {
         if (isNaN(Number(id))) {
           this.router.navigate(['/']);
@@ -49,11 +49,10 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       this.getProductKeys();
       this.buildForm();
     }, () => this.router.navigate(['/']));
-    this.subs.push(sub);
   }
 
   ngOnDestroy(): void {
-    this.subs.forEach(sub => sub.unsubscribe());
+    this.subscription.unsubscribe();
   }
 
   edit(): void {
@@ -69,7 +68,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
         this.product = products.find(product => product.id === this.product.id);
         this.isEdit = false;
       });
-    this.subs.push(sub);
+    this.subscription.add(sub);
   }
 
   private buildForm(): void {

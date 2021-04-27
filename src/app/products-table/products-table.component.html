@@ -1,4 +1,4 @@
-<ng-container *ngIf="isReady">
+<ng-container *ngIf="!(isLoading$ | async)">
   <div class="button-block">
     <button mat-raised-button color="primary" (click)="openAddModal()">Add Product</button>
   </div>
