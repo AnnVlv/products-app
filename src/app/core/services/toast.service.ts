@@ -16,13 +16,10 @@ export class ToastService {
       .asObservable()
       .pipe(
         map(message => [message, '']),
-        switchMap(values => {
-          const messages = values;
-          return timer(0, this.time).pipe(
-            map((_, i) => messages[i]),
-            take(2)
-          );
-        })
+        switchMap(messages => timer(0, this.time).pipe(
+          map((_, i) => messages[i]),
+          take(2)
+        ))
       );
   }
 
