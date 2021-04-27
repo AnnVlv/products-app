@@ -8,7 +8,7 @@ import {Select, Store} from '@ngxs/store';
 import {EditProduct, GetProductById} from '../state/products/product.actions';
 import {Product} from '../shared/models';
 import {ProductsStateGetter} from '../state/products/products.getter';
-import {OWNER_INFO} from '../core/services/products.service';
+import {OWNER_INFO, ProductsService} from '../core/services/products.service';
 
 
 @Component({
@@ -19,10 +19,10 @@ import {OWNER_INFO} from '../core/services/products.service';
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   product: Product;
   productKeys: string[];
-  isReady = false;
   isEdit = false;
   form: FormGroup;
   subscription: Subscription;
+  isLoading$: Observable<boolean>;
 
   @Select(ProductsStateGetter.products) products$!: Observable<Product[]>;
 
@@ -33,6 +33,15 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
+    this.isLoading$ = ProductsService.isLoading$;
+
+    this.isLoading$
+      .pipe(withLatestFrom(this.products$))
+      .subscribe(([_, products]) => {
+        this.product = products?.find(product => product.id === this.product.id);
+        this.isEdit = false;
+      });
+
     let productId;
     this.subscription = this.route.params.pipe(
       tap(({ id }) => {
@@ -44,7 +53,6 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
       switchMap(({ id }) => this.store.dispatch(new GetProductById(id))),
       withLatestFrom(this.products$)
     ).subscribe(([_, products]) => {
-      this.isReady = true;
       this.product = products.find(product => product.id === productId);
       this.getProductKeys();
       this.buildForm();
@@ -56,19 +64,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   edit(): void {
-    const sub = this.store
-      .dispatch(new EditProduct({
-        ...this.form.value,
-        id: this.product.id,
-        ...OWNER_INFO
-      }))
-      .pipe(withLatestFrom(this.products$)
-      )
-      .subscribe(([_, products]) => {
-        this.product = products.find(product => product.id === this.product.id);
-        this.isEdit = false;
-      });
-    this.subscription.add(sub);
+    this.store.dispatch(new EditProduct({
+      ...this.form.value,
+      id: this.product.id,
+      ...OWNER_INFO
+    }));
   }
 
   private buildForm(): void {
