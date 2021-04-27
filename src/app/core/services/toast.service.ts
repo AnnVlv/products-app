@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Observable, Subject, timer} from 'rxjs';
-import {map, switchMap, take} from 'rxjs/operators';
+import {merge, Observable, Subject, timer} from 'rxjs';
+import {mapTo, switchMapTo} from 'rxjs/operators';
 
 
 @Injectable({
@@ -12,15 +12,16 @@ export class ToastService {
   private showMessageEvent$: Subject<string> = new Subject<string>();
 
   constructor() {
-    this.message$ = this.showMessageEvent$
-      .asObservable()
-      .pipe(
-        map(message => [message, '']),
-        switchMap(messages => timer(0, this.time).pipe(
-          map((_, i) => messages[i]),
-          take(2)
-        ))
-      );
+    this.message$ = merge(
+      this.showMessageEvent$,
+      this.showMessageEvent$.pipe(
+        switchMapTo(
+          timer(this.time).pipe(
+            mapTo(null)
+          )
+        )
+      )
+    );
   }
 
   show(message: string): void {

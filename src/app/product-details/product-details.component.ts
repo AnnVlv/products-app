@@ -1,14 +1,12 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {switchMap, tap, withLatestFrom} from 'rxjs/operators';
+import {tap, withLatestFrom} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
-import {Select, Store} from '@ngxs/store';
 
-import {EditProduct, GetProductById} from '../state/products/product.actions';
 import {Product} from '../shared/models';
-import {ProductsStateGetter} from '../state/products/products.getter';
 import {OWNER_INFO, ProductsService} from '../core/services/products.service';
+import {ProductsProviderService} from '../core/services/state-providers';
 
 
 @Component({
@@ -24,12 +22,14 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   isLoading$: Observable<boolean>;
 
-  @Select(ProductsStateGetter.products) products$!: Observable<Product[]>;
+  get products$(): Observable<Product[]> {
+    return this.productsProviderService.products$;
+  }
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private store: Store
+    private productsProviderService: ProductsProviderService
   ) { }
 
   ngOnInit(): void {
@@ -50,7 +50,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
         }
         productId = Number(id);
       }),
-      switchMap(({ id }) => this.store.dispatch(new GetProductById(id))),
+      tap(({ id }) => this.productsProviderService.getProductById(id)),
       withLatestFrom(this.products$)
     ).subscribe(([_, products]) => {
       this.product = products.find(product => product.id === productId);
@@ -64,11 +64,11 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   edit(): void {
-    this.store.dispatch(new EditProduct({
+    this.productsProviderService.editProduct({
       ...this.form.value,
       id: this.product.id,
       ...OWNER_INFO
-    }));
+    });
   }
 
   private buildForm(): void {

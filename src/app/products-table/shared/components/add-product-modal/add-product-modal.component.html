@@ -25,6 +25,6 @@
 </div>
 
 <div mat-dialog-actions>
-  <button mat-button (click)="close(false)">Cancel</button>
-  <button mat-button (click)="close(true)" [disabled]="form.invalid">Ok</button>
+  <button mat-button (click)="close()">Cancel</button>
+  <button mat-button (click)="add()" [disabled]="form.invalid">Ok</button>
 </div>

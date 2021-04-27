@@ -2,13 +2,11 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
 import {Observable, Subscription} from 'rxjs';
-import {Select, Store} from '@ngxs/store';
 
-import {AddProduct, DeleteProduct, GetProducts} from '../state/products/product.actions';
 import {Product} from '../shared/models';
-import {ProductsStateGetter} from '../state/products/products.getter';
-import {OWNER_INFO, ProductsService} from '../core/services/products.service';
+import {ProductsService} from '../core/services';
 import {ToastService} from '../core/services';
+import {ProductsProviderService} from '../core/services/state-providers';
 import {DeleteProductModalComponent} from './shared/components/delete-product-modal/delete-product-modal.component';
 import {AddProductModalComponent} from './shared/components/add-product-modal/add-product-modal.component';
 
@@ -24,14 +22,19 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   isLoading$: Observable<boolean>;
 
-  @Select(ProductsStateGetter.products) products$!: Observable<Product[]>;
-  @Select(ProductsStateGetter.total) total$!: Observable<number>;
+  get products$(): Observable<Product[]> {
+    return this.productsProviderService.products$;
+  }
+
+  get total$(): Observable<number> {
+    return this.productsProviderService.total$;
+  }
 
   constructor(
     public dialog: MatDialog,
-    private store: Store,
     private router: Router,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private productsProviderService: ProductsProviderService
   ) {}
 
   ngOnInit(): void {
@@ -40,7 +43,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
     this.subscription = this.products$
       .subscribe(products => this.products = products);
 
-    this.store.dispatch(new GetProducts());
+    this.productsProviderService.getProducts();
   }
 
   ngOnDestroy(): void {
@@ -48,28 +51,15 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   }
 
   openDeleteModal(id: number): void {
-    const dialogRef = this.dialog.open(DeleteProductModalComponent, {
-      width: '250px'
-    });
-
-    const sub = dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.store.dispatch(new DeleteProduct(id));
-      }
-      sub.unsubscribe();
+    this.dialog.open(DeleteProductModalComponent, {
+      width: '250px',
+      data: id
     });
   }
 
   openAddModal(): void {
-    const dialogRef = this.dialog.open(AddProductModalComponent, {
+    this.dialog.open(AddProductModalComponent, {
       width: '400px'
-    });
-
-    const sub = dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.store.dispatch(new AddProduct({ ...result, ...OWNER_INFO }));
-      }
-      sub.unsubscribe();
     });
   }
 
