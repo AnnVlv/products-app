@@ -1,20 +1,30 @@
 import {Injectable} from '@angular/core';
-import {Subject} from 'rxjs';
-import {debounceTime, tap} from 'rxjs/operators';
+import {Observable, of, Subject, timer} from 'rxjs';
+import {debounceTime, map, repeatWhen, switchMap, take, tap} from 'rxjs/operators';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToastService {
-  showMessageEvent$: Subject<string> = new Subject<string>();
-  message$: Subject<string> = new Subject<string>();
+  message$: Observable<string>;
+  message = '';
+  private readonly time = 3000;
+  private showMessageEvent$: Subject<string> = new Subject<string>();
 
   constructor() {
     this.showMessageEvent$.pipe(
-      tap(message => this.message$.next(message)),
-      debounceTime(3000)
-    ).subscribe(_ => this.message$.next(''));
+      tap(message => this.message = message),
+      debounceTime(this.time)
+    ).subscribe(() => this.message = '');
+
+    this.message$ = of(this.message).pipe(
+      repeatWhen(() => this.showMessageEvent$),
+      switchMap(() => timer(0, this.time).pipe(
+        map(() => this.message),
+        take(2))
+      )
+    );
   }
 
   show(message: string): void {

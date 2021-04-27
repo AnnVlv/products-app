@@ -1,6 +1,7 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 
-import {ToastService} from '../../../core/services/toast.service';
+import {ToastService} from '../../../core/services';
+import {Observable} from 'rxjs';
 
 
 @Component({
@@ -9,17 +10,13 @@ import {ToastService} from '../../../core/services/toast.service';
   styleUrls: ['./toast.component.scss']
 })
 export class ToastComponent implements OnInit {
-  message: string;
+  message$: Observable<string>;
 
   constructor(
-    public toastService: ToastService,
-    private changeDetectorRef: ChangeDetectorRef
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
-    this.toastService.message$.subscribe(message => {
-      this.message = message;
-      this.changeDetectorRef.detectChanges();
-    });
+    this.message$ = this.toastService.message$;
   }
 }

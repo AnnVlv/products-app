@@ -1,3 +1,3 @@
-<div class="toast" *ngIf="message">
+<div class="toast" *ngIf="message$ | async; let message">
   {{ message }}
 </div>
