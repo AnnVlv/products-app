@@ -22,10 +22,6 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   isLoading$: Observable<boolean>;
 
-  get products$(): Observable<Product[]> {
-    return this.productsProviderService.products$;
-  }
-
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -36,7 +32,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.isLoading$ = ProductsService.isLoading$;
 
     this.isLoading$
-      .pipe(withLatestFrom(this.products$))
+      .pipe(withLatestFrom(this.productsProviderService.products$))
       .subscribe(([_, products]) => {
         this.product = products?.find(product => product.id === this.product.id);
         this.isEdit = false;
@@ -51,7 +47,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
         productId = Number(id);
       }),
       tap(({ id }) => this.productsProviderService.getProductById(id)),
-      withLatestFrom(this.products$)
+      withLatestFrom(this.productsProviderService.products$)
     ).subscribe(([_, products]) => {
       this.product = products.find(product => product.id === productId);
       this.getProductKeys();

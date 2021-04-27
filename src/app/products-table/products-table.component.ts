@@ -1,7 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {MatDialog} from '@angular/material/dialog';
-import {Observable, Subscription} from 'rxjs';
+import {Observable, Subject, Subscription} from 'rxjs';
+import {switchMap} from 'rxjs/operators';
 
 import {Product} from '../shared/models';
 import {ProductsService} from '../core/services';
@@ -20,15 +21,9 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   products: Product[] = [];
   displayedColumns: string[] = ['name', 'description', 'price', 'count', 'total', 'delete'];
   subscription: Subscription;
+  total$: Observable<number>;
   isLoading$: Observable<boolean>;
-
-  get products$(): Observable<Product[]> {
-    return this.productsProviderService.products$;
-  }
-
-  get total$(): Observable<number> {
-    return this.productsProviderService.total$;
-  }
+  deleteModal$: Subject<any> = new Subject<any>();
 
   constructor(
     public dialog: MatDialog,
@@ -39,11 +34,18 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading$ = ProductsService.isLoading$;
+    this.total$ = this.productsProviderService.total$;
 
-    this.subscription = this.products$
+    this.subscription = this.productsProviderService.products$
       .subscribe(products => this.products = products);
 
     this.productsProviderService.getProducts();
+
+    this.deleteModal$.pipe(
+      switchMap(closed => closed)
+    ).subscribe(() => {
+      // after closed
+    });
   }
 
   ngOnDestroy(): void {
@@ -51,10 +53,11 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   }
 
   openDeleteModal(id: number): void {
-    this.dialog.open(DeleteProductModalComponent, {
+    const dialogRef = this.dialog.open(DeleteProductModalComponent, {
       width: '250px',
       data: id
     });
+    this.deleteModal$.next(dialogRef.afterClosed());
   }
 
   openAddModal(): void {
