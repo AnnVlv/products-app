@@ -4,21 +4,23 @@ import {ReactiveFormsModule} from '@angular/forms';
 
 import {MaterialModule} from './material/material.module';
 import {ToastModule} from './components/toast/toast.module';
+import {SpinnerModule} from './components/spinner/spinner.module';
 
 
 @NgModule({
-  declarations: [],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
-    ToastModule
+    ToastModule,
+    SpinnerModule
   ],
   exports: [
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
-    ToastModule
+    ToastModule,
+    SpinnerModule
   ]
 })
 export class SharedModule { }

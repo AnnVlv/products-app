@@ -1,4 +1,4 @@
-<ng-container *ngIf="!(isLoading$ | async)">
+<ng-container *ngIf="!(isLoading$ | async); else loadingBlock">
   <div class="button-block">
     <button mat-raised-button color="primary" (click)="openAddModal()">Add Product</button>
   </div>
@@ -60,3 +60,7 @@
     No products.
   </ng-template>
 </ng-container>
+
+<ng-template #loadingBlock>
+  <app-spinner></app-spinner>
+</ng-template>
