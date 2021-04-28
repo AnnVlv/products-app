@@ -18,10 +18,10 @@ import {AddProductModalComponent} from './shared/components/add-product-modal/ad
   styleUrls: ['./products-table.component.scss']
 })
 export class ProductsTableComponent implements OnInit, OnDestroy {
-  products: Product[] = [];
   displayedColumns: string[] = ['name', 'description', 'price', 'count', 'total', 'delete'];
   subscription: Subscription;
   total$: Observable<number>;
+  products$: Observable<Product[]>;
   isLoading$: Observable<boolean>;
   deleteModal$: Subject<MatDialogRef<DeleteProductModalComponent>> = new Subject<MatDialogRef<DeleteProductModalComponent>>();
 
@@ -35,9 +35,7 @@ export class ProductsTableComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.isLoading$ = ProductsService.isLoading$;
     this.total$ = this.productsProviderService.total$;
-
-    this.subscription = this.productsProviderService.products$
-      .subscribe(products => this.products = products);
+    this.products$ = this.productsProviderService.products$;
 
     this.productsProviderService.getProducts();
 

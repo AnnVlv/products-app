@@ -5,6 +5,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from './material/material.module';
 import {ToastModule} from './components/toast/toast.module';
 import {SpinnerModule} from './components/spinner/spinner.module';
+import { ShowSpinnerDirective } from './directives/show-spinner.directive';
 
 
 @NgModule({
@@ -20,7 +21,11 @@ import {SpinnerModule} from './components/spinner/spinner.module';
     ReactiveFormsModule,
     MaterialModule,
     ToastModule,
-    SpinnerModule
+    SpinnerModule,
+    ShowSpinnerDirective
+  ],
+  declarations: [
+    ShowSpinnerDirective
   ]
 })
 export class SharedModule { }
