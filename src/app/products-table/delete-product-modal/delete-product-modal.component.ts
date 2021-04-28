@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
-import {ProductsProviderService} from '../../core/services/state-providers';
+import {ProductsProviderService} from '../../core/services/products-provider.service';
 
 
 @Component({

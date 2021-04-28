@@ -2,9 +2,9 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
 
-import {ProductsStateGetter} from '../../../state/products/products.getter';
-import {Product} from '../../../shared/models';
-import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts} from '../../../state/products/product.actions';
+import {ProductsStateGetter} from '../../state/products/products.getter';
+import {Product} from '../../shared/models';
+import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts} from '../../state/products/product.actions';
 
 
 @Injectable({

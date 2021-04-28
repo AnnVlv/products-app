@@ -4,11 +4,11 @@ import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 
 import {Product} from '../shared/models';
-import {ProductsService} from '../core/services';
+import {ProductsService} from '../core/services/products.service';
 import {ToastService} from '../core/services';
-import {ProductsProviderService} from '../core/services/state-providers';
 import {DeleteProductModalComponent} from './delete-product-modal/delete-product-modal.component';
 import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
+import {ProductsProviderService} from '../core/services/products-provider.service';
 
 
 @Component({

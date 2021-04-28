@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 
 import {OWNER_INFO} from '../../core/services/products.service';
-import {ProductsProviderService} from '../../core/services/state-providers';
+import {ProductsProviderService} from '../../core/services/products-provider.service';
 
 
 @Component({

@@ -7,7 +7,7 @@ import {Observable, Subscription} from 'rxjs';
 
 import {Product} from '../shared/models';
 import {OWNER_INFO, ProductsService} from '../core/services/products.service';
-import {ProductsProviderService} from '../core/services/state-providers';
+import {ProductsProviderService} from '../core/services/products-provider.service';
 
 
 @Component({

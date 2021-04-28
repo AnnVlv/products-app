@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {catchError, switchMap} from 'rxjs/operators';
 import {Action, State, StateContext} from '@ngxs/store';
 
-import {ProductsService} from '../../core/services';
+import {ProductsService} from '../../core/services/products.service';
 import {
   AddProduct,
   DeleteProduct,
