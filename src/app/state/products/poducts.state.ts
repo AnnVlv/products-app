@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
 
-import {Observable} from 'rxjs';
-import {catchError, switchMap} from 'rxjs/operators';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {catchError, delay, switchMap, tap} from 'rxjs/operators';
 import {Action, State, StateContext} from '@ngxs/store';
 
-import {ProductsService} from '../../core/services/products.service';
 import {
   AddProduct,
   DeleteProduct,
@@ -15,9 +15,17 @@ import {
   GetProducts,
   SetProducts
 } from './product.actions';
-import {Owner, ProductsStateModel} from '../../shared/models';
+import {Owner, Product, ProductsStateModel} from '../../shared/models';
 import {SetOwners} from '../owners/owners.actions';
 
+
+export const OWNER_INFO = {
+  ownerId: 2,
+  owner: {
+    id: 2,
+    name: 'Owner'
+  }
+};
 
 @State<ProductsStateModel>({
   name: 'products',
@@ -28,7 +36,13 @@ import {SetOwners} from '../owners/owners.actions';
 })
 @Injectable()
 export class ProductsState {
-  constructor(private productsService: ProductsService) {}
+  static isLoading$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+
+  private URL = `products`;
+
+  constructor(
+    private httpClient: HttpClient
+  ) { }
 
   @Action(SetProducts)
   setProducts(ctx: StateContext<ProductsStateModel>, { products }: SetProducts): void {
@@ -75,35 +89,50 @@ export class ProductsState {
 
   @Action(GetProducts)
   getProducts(ctx: StateContext<ProductsStateModel>): Observable<void> {
-    return this.productsService.get().pipe(
+    this.emitLoadingStart();
+    return this.httpClient.get<Product[]>(this.URL).pipe(
+      delay(400),
+      tap(() => this.emitLoadingEnd()),
       switchMap(products => ctx.dispatch(new SetProducts(products)))
     );
   }
 
   @Action(GetProductById)
   getProductById(ctx: StateContext<ProductsStateModel>, { id }: GetProductById): Observable<void> {
-    return this.productsService.getById(id).pipe(
+    this.emitLoadingStart();
+    return this.httpClient.get<Product>(`${ this.URL }/${ id }`).pipe(
+      delay(400),
+      tap(() => this.emitLoadingEnd()),
       switchMap(product => ctx.dispatch(new SetProducts([product])))
     );
   }
 
   @Action(AddProduct)
   addProduct(ctx: StateContext<ProductsStateModel>, { product }: AddProduct): Observable<void> {
-    return this.productsService.add(product).pipe(
-      switchMap(({ id }) => ctx.dispatch(new SetProducts([{  ...product, id }])))
+    this.emitLoadingStart();
+    return this.httpClient.post<Product>(this.URL, { ...product }).pipe(
+      delay(400),
+      tap(() => this.emitLoadingEnd()),
+      switchMap(({ id }) => ctx.dispatch(new SetProducts([{  ...product, ...OWNER_INFO, id }])))
     );
   }
 
   @Action(EditProduct)
   editProduct(ctx: StateContext<ProductsStateModel>, { product }: EditProduct): Observable<void> {
-    return this.productsService.edit(product).pipe(
+    this.emitLoadingStart();
+    return this.httpClient.put<Product>(`${ this.URL }/${ product.id }`, { ...product }).pipe(
+      delay(400),
+      tap(() => this.emitLoadingEnd()),
       switchMap(updatedProduct => ctx.dispatch(new SetProducts([updatedProduct])))
     );
   }
 
   @Action(DeleteProduct)
   deleteProduct(ctx: StateContext<ProductsStateModel>, { id }: DeleteProduct): Observable<void> {
-    return this.productsService.delete(id).pipe(
+    this.emitLoadingStart();
+    return this.httpClient.delete<null>(`${ this.URL }/${ id }`).pipe(
+      delay(400),
+      tap(() => this.emitLoadingEnd()),
       switchMap(() => ctx.dispatch(new DeleteProductSuccess(id))),
       catchError(() => ctx.dispatch(new DeleteProductFail()))
     );
@@ -114,5 +143,13 @@ export class ProductsState {
     const state = ctx.getState();
     const productsIds = state.productsIds.filter(productId => productId !== id);
     ctx.patchState({ productsIds });
+  }
+
+  private emitLoadingStart(): void {
+    ProductsState.isLoading$.next(true);
+  }
+
+  private emitLoadingEnd(): void {
+    ProductsState.isLoading$.next(false);
   }
 }

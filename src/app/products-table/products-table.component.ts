@@ -4,11 +4,11 @@ import {MatDialog} from '@angular/material/dialog';
 import {Observable} from 'rxjs';
 
 import {Product} from '../shared/models';
-import {ProductsService} from '../core/services/products.service';
 import {ToastService} from '../core/services';
 import {DeleteProductModalComponent} from './delete-product-modal/delete-product-modal.component';
 import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
 import {ProductsProviderService} from '../core/services/products-provider.service';
+import {ProductsState} from '../state/products/poducts.state';
 
 
 @Component({
@@ -29,7 +29,7 @@ export class ProductsTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.isLoading$ = ProductsService.isLoading$;
+    this.isLoading$ = ProductsState.isLoading$;
     this.total$ = this.productsProviderService.total$;
     this.products$ = this.productsProviderService.products$;
 

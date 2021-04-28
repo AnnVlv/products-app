@@ -6,8 +6,8 @@ import {tap, withLatestFrom} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 
 import {Product} from '../shared/models';
-import {OWNER_INFO, ProductsService} from '../core/services/products.service';
 import {ProductsProviderService} from '../core/services/products-provider.service';
+import {OWNER_INFO, ProductsState} from '../state/products/poducts.state';
 
 
 @Component({
@@ -31,7 +31,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.isLoading$ = ProductsService.isLoading$;
+    this.isLoading$ = ProductsState.isLoading$;
 
     this.isLoading$
       .pipe(withLatestFrom(this.productsProviderService.products$))
@@ -46,8 +46,8 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         }
         this.productId = Number(id);
+        this.productsProviderService.getProductById(id);
       }),
-      tap(({ id }) => this.productsProviderService.getProductById(id)),
       withLatestFrom(this.productsProviderService.products$)
     ).subscribe(([_, products]) => {
       this.product = products.find(product => product.id === this.productId);
