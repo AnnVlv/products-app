@@ -3,6 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 
 import {ProductsService} from '../../core/services/products.service';
+import {OWNER_INFO} from '../../state/products/poducts.state';
 
 
 @Component({
@@ -23,7 +24,7 @@ export class AddProductModalComponent implements OnInit {
   }
 
   add(): void {
-    this.productsService.addProduct({ ...this.form.value });
+    this.productsService.addProduct({ ...this.form.value, ...OWNER_INFO });
     this.close();
   }
 
