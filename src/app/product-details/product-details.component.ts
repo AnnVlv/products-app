@@ -1,12 +1,11 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
-import {tap, withLatestFrom} from 'rxjs/operators';
-import {Observable, Subscription} from 'rxjs';
+import {Observable} from 'rxjs';
 
 import {Product} from '../shared/models';
-import {OWNER_INFO, ProductsState} from '../state/products/poducts.state';
+import {OWNER_INFO} from '../state/products/poducts.state';
 import {ProductsService} from '../core/services/products.service';
 
 
@@ -15,13 +14,12 @@ import {ProductsService} from '../core/services/products.service';
   templateUrl: './product-details.component.html',
   styleUrls: ['./product-details.component.scss']
 })
-export class ProductDetailsComponent implements OnInit, OnDestroy {
+export class ProductDetailsComponent implements OnInit {
   product: Product;
   productId: number;
   productKeys: string[];
   isEdit = false;
   form: FormGroup;
-  subscription: Subscription;
   isLoading$: Observable<boolean>;
 
   constructor(
@@ -31,33 +29,14 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.isLoading$ = ProductsState.isLoading$;
-
-    this.isLoading$
-      .pipe(withLatestFrom(this.productsService.products$))
-      .subscribe(([_, products]) => {
-        this.product = products?.find(product => product.id === this.productId);
-        this.isEdit = false;
-      });
-
-    this.subscription = this.route.params.pipe(
-      tap(({ id }) => {
-        if (isNaN(Number(id))) {
-          this.router.navigate(['/']);
-        }
-        this.productId = Number(id);
-        this.productsService.getProductById(id);
-      }),
-      withLatestFrom(this.productsService.products$)
-    ).subscribe(([_, products]) => {
+    this.productId = this.route.snapshot.data?.data?.productId;
+    this.productsService.products$.subscribe(products => {
+      this.product = products?.find(product => product.id === this.productId);
+      this.isEdit = false;
       this.product = products.find(product => product.id === this.productId);
       this.getProductKeys();
       this.buildForm();
-    }, () => this.router.navigate(['/']));
-  }
-
-  ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    });
   }
 
   edit(): void {

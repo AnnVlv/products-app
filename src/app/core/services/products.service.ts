@@ -3,7 +3,7 @@ import {Observable} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
 
 import {ProductsStateGetter} from '../../state/products/products.getter';
-import {Product} from '../../shared/models';
+import {Product, StateModel} from '../../shared/models';
 import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts} from '../../state/products/product.actions';
 
 
@@ -16,23 +16,23 @@ export class ProductsService {
 
   constructor(private store: Store) { }
 
-  getProducts(): void {
-    this.store.dispatch(new GetProducts());
+  getProducts(): Observable<StateModel> {
+    return this.store.dispatch(new GetProducts());
   }
 
-  getProductById(id: number): void {
-    this.store.dispatch(new GetProductById(id));
+  getProductById(id: number): Observable<StateModel> {
+    return this.store.dispatch(new GetProductById(id));
   }
 
-  addProduct(product: Product): void {
-    this.store.dispatch(new AddProduct(product));
+  addProduct(product: Product): Observable<StateModel> {
+    return this.store.dispatch(new AddProduct(product));
   }
 
-  editProduct(product: Product): void {
-    this.store.dispatch(new EditProduct(product));
+  editProduct(product: Product): Observable<StateModel> {
+    return this.store.dispatch(new EditProduct(product));
   }
 
-  deleteProduct(id: number): void {
-    this.store.dispatch(new DeleteProduct(id));
+  deleteProduct(id: number): Observable<StateModel> {
+    return this.store.dispatch(new DeleteProduct(id));
   }
 }

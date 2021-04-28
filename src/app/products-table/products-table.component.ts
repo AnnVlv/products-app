@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 
 import {Observable} from 'rxjs';
+import {Select} from '@ngxs/store';
 
 import {Product} from '../shared/models';
 import {ToastService} from '../core/services';
@@ -9,6 +10,7 @@ import {DeleteProductModalComponent} from './delete-product-modal/delete-product
 import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
 import {ProductsState} from '../state/products/poducts.state';
 import {ProductsService} from '../core/services/products.service';
+import {ProductsStateGetter} from '../state/products/products.getter';
 
 
 @Component({
@@ -22,18 +24,18 @@ export class ProductsTableComponent implements OnInit {
   products$: Observable<Product[]>;
   isLoading$: Observable<boolean>;
 
+  @Select(ProductsStateGetter.products) products$4!: Observable<Product[]>;
+
   constructor(
     private dialog: MatDialog,
     private toastService: ToastService,
     private productsService: ProductsService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.isLoading$ = ProductsState.isLoading$;
     this.total$ = this.productsService.total$;
     this.products$ = this.productsService.products$;
-
-    this.productsService.getProducts();
   }
 
   openDeleteModal(id: number): void {
