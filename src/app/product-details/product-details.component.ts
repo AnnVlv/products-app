@@ -2,8 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 
-import {Observable} from 'rxjs';
-
 import {Product} from '../shared/models';
 import {OWNER_INFO} from '../state/products/poducts.state';
 import {ProductsService} from '../core/services/products.service';
@@ -20,7 +18,6 @@ export class ProductDetailsComponent implements OnInit {
   productKeys: string[];
   isEdit = false;
   form: FormGroup;
-  isLoading$: Observable<boolean>;
 
   constructor(
     private route: ActivatedRoute,

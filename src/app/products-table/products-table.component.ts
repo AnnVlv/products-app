@@ -8,7 +8,6 @@ import {Product} from '../shared/models';
 import {ToastService} from '../core/services';
 import {DeleteProductModalComponent} from './delete-product-modal/delete-product-modal.component';
 import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
-import {ProductsState} from '../state/products/poducts.state';
 import {ProductsService} from '../core/services/products.service';
 import {ProductsStateGetter} from '../state/products/products.getter';
 
@@ -33,7 +32,6 @@ export class ProductsTableComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.isLoading$ = ProductsState.isLoading$;
     this.total$ = this.productsService.total$;
     this.products$ = this.productsService.products$;
   }
