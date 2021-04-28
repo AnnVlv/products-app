@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 
 import {AddProductModalComponent} from './add-product-modal.component';
-import {SharedModule} from '../../../../shared/shared.module';
+import {SharedModule} from '../../shared/shared.module';
 
 
 @NgModule({

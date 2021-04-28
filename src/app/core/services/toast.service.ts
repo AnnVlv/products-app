@@ -1,4 +1,5 @@
 import {Injectable} from '@angular/core';
+
 import {merge, Observable, Subject, timer} from 'rxjs';
 import {mapTo, switchMapTo} from 'rxjs/operators';
 

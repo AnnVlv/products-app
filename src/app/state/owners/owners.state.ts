@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
+
 import {Action, State, StateContext} from '@ngxs/store';
+
 import {Owner, OwnersStateModel} from '../../shared/models';
 import {SetOwners} from './owners.actions';
 

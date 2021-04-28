@@ -9,7 +9,7 @@ import {
   ViewContainerRef
 } from '@angular/core';
 
-import {SpinnerComponent} from '../components/spinner/spinner.component';
+import {SpinnerComponent} from '../../components/spinner/spinner.component';
 
 
 @Directive({

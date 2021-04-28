@@ -1,6 +1,7 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+
 import {tap, withLatestFrom} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 
@@ -16,6 +17,7 @@ import {ProductsProviderService} from '../core/services/state-providers';
 })
 export class ProductDetailsComponent implements OnInit, OnDestroy {
   product: Product;
+  productId: number;
   productKeys: string[];
   isEdit = false;
   form: FormGroup;
@@ -34,22 +36,21 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
     this.isLoading$
       .pipe(withLatestFrom(this.productsProviderService.products$))
       .subscribe(([_, products]) => {
-        this.product = products?.find(product => product.id === this.product.id);
+        this.product = products?.find(product => product.id === this.productId);
         this.isEdit = false;
       });
 
-    let productId;
     this.subscription = this.route.params.pipe(
       tap(({ id }) => {
         if (isNaN(Number(id))) {
           this.router.navigate(['/']);
         }
-        productId = Number(id);
+        this.productId = Number(id);
       }),
       tap(({ id }) => this.productsProviderService.getProductById(id)),
       withLatestFrom(this.productsProviderService.products$)
     ).subscribe(([_, products]) => {
-      this.product = products.find(product => product.id === productId);
+      this.product = products.find(product => product.id === this.productId);
       this.getProductKeys();
       this.buildForm();
     }, () => this.router.navigate(['/']));

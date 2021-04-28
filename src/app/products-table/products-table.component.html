@@ -6,13 +6,13 @@
     <button mat-raised-button color="warn" (click)="showError()">Show Error</button>
   </div>
 
-  <ng-container *ngIf="products$ | async; let products; else noProductsBlock">
-    <ng-container *ngIf="products.length">
+  <ng-container *ngIf="products$ | async as products">
+    <ng-container *ngIf="products.length else noProductsBlock">
       <table mat-table [dataSource]="products" class="mat-elevation-z8">
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef> Name </th>
           <td mat-cell *matCellDef="let element" class="name-value"
-              (click)="openDetailsPage(element.id)"> {{element.name}} </td>
+              [routerLink]="['/', element.id]"> {{element.name}} </td>
         </ng-container>
 
         <ng-container matColumnDef="description">

@@ -5,7 +5,7 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {MaterialModule} from './material/material.module';
 import {ToastModule} from './components/toast/toast.module';
 import {SpinnerModule} from './components/spinner/spinner.module';
-import { ShowSpinnerDirective } from './directives/show-spinner.directive';
+import {ShowSpinnerModule} from './directives/show-spinner/show-spinner.module';
 
 
 @NgModule({
@@ -14,7 +14,8 @@ import { ShowSpinnerDirective } from './directives/show-spinner.directive';
     ReactiveFormsModule,
     MaterialModule,
     ToastModule,
-    SpinnerModule
+    SpinnerModule,
+    ShowSpinnerModule
   ],
   exports: [
     CommonModule,
@@ -22,10 +23,7 @@ import { ShowSpinnerDirective } from './directives/show-spinner.directive';
     MaterialModule,
     ToastModule,
     SpinnerModule,
-    ShowSpinnerDirective
-  ],
-  declarations: [
-    ShowSpinnerDirective
+    ShowSpinnerModule
   ]
 })
 export class SharedModule { }

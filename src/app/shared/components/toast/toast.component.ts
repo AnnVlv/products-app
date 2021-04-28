@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 
-import {ToastService} from '../../../core/services';
 import {Observable} from 'rxjs';
+
+import {ToastService} from '../../../core/services';
 
 
 @Component({
