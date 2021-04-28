@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 
-import {ProductsProviderService} from '../../core/services/products-provider.service';
+import {ProductsService} from '../../core/services/products.service';
 
 
 @Component({
@@ -15,7 +15,7 @@ export class AddProductModalComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AddProductModalComponent>,
-    private productsProviderService: ProductsProviderService
+    private productsService: ProductsService
   ) {}
 
   ngOnInit(): void {
@@ -23,7 +23,7 @@ export class AddProductModalComponent implements OnInit {
   }
 
   add(): void {
-    this.productsProviderService.addProduct({ ...this.form.value });
+    this.productsService.addProduct({ ...this.form.value });
     this.close();
   }
 

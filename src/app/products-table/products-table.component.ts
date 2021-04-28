@@ -7,8 +7,8 @@ import {Product} from '../shared/models';
 import {ToastService} from '../core/services';
 import {DeleteProductModalComponent} from './delete-product-modal/delete-product-modal.component';
 import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
-import {ProductsProviderService} from '../core/services/products-provider.service';
 import {ProductsState} from '../state/products/poducts.state';
+import {ProductsService} from '../core/services/products.service';
 
 
 @Component({
@@ -25,15 +25,15 @@ export class ProductsTableComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private toastService: ToastService,
-    private productsProviderService: ProductsProviderService
+    private productsService: ProductsService
   ) {}
 
   ngOnInit(): void {
     this.isLoading$ = ProductsState.isLoading$;
-    this.total$ = this.productsProviderService.total$;
-    this.products$ = this.productsProviderService.products$;
+    this.total$ = this.productsService.total$;
+    this.products$ = this.productsService.products$;
 
-    this.productsProviderService.getProducts();
+    this.productsService.getProducts();
   }
 
   openDeleteModal(id: number): void {

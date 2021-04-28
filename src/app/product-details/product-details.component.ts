@@ -6,8 +6,8 @@ import {tap, withLatestFrom} from 'rxjs/operators';
 import {Observable, Subscription} from 'rxjs';
 
 import {Product} from '../shared/models';
-import {ProductsProviderService} from '../core/services/products-provider.service';
 import {OWNER_INFO, ProductsState} from '../state/products/poducts.state';
+import {ProductsService} from '../core/services/products.service';
 
 
 @Component({
@@ -27,14 +27,14 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private productsProviderService: ProductsProviderService
+    private productsService: ProductsService
   ) { }
 
   ngOnInit(): void {
     this.isLoading$ = ProductsState.isLoading$;
 
     this.isLoading$
-      .pipe(withLatestFrom(this.productsProviderService.products$))
+      .pipe(withLatestFrom(this.productsService.products$))
       .subscribe(([_, products]) => {
         this.product = products?.find(product => product.id === this.productId);
         this.isEdit = false;
@@ -46,9 +46,9 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
           this.router.navigate(['/']);
         }
         this.productId = Number(id);
-        this.productsProviderService.getProductById(id);
+        this.productsService.getProductById(id);
       }),
-      withLatestFrom(this.productsProviderService.products$)
+      withLatestFrom(this.productsService.products$)
     ).subscribe(([_, products]) => {
       this.product = products.find(product => product.id === this.productId);
       this.getProductKeys();
@@ -61,7 +61,7 @@ export class ProductDetailsComponent implements OnInit, OnDestroy {
   }
 
   edit(): void {
-    this.productsProviderService.editProduct({
+    this.productsService.editProduct({
       ...this.form.value,
       id: this.product.id,
       ...OWNER_INFO

@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
-import {ProductsProviderService} from '../../core/services/products-provider.service';
+import {ProductsService} from '../../core/services/products.service';
 
 
 @Component({
@@ -13,11 +13,11 @@ export class DeleteProductModalComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) public id: number,
     public dialogRef: MatDialogRef<DeleteProductModalComponent>,
-    private productsProviderService: ProductsProviderService
+    private productsService: ProductsService
   ) {}
 
   delete(): void {
-    this.productsProviderService.deleteProduct(this.id);
+    this.productsService.deleteProduct(this.id);
     this.close();
   }
 
