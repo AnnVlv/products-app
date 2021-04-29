@@ -2,12 +2,14 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
 import {ProductDetailsComponent} from './product-details.component';
+import {ProductResolver} from '../core/resolvers/product.resolver';
 
 
 const routes: Routes = [
   {
     path: '',
-    component: ProductDetailsComponent
+    component: ProductDetailsComponent,
+    resolve: { product: ProductResolver }
   }
 ];
 
