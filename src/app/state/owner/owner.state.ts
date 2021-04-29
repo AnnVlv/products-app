@@ -6,7 +6,7 @@ import {Owner} from '../../shared/models';
 import {SetOwners} from './owner.actions';
 
 
-export interface OwnersStateModel {
+export interface OwnerStateModel {
   ids: number[];
   entities: {
     [key: number]: Owner
@@ -15,7 +15,7 @@ export interface OwnersStateModel {
 }
 
 
-@State<OwnersStateModel>({
+@State<OwnerStateModel>({
   name: 'owners',
   defaults: {
     ids: [],
@@ -29,7 +29,7 @@ export interface OwnersStateModel {
 @Injectable()
 export class OwnerState {
   @Action(SetOwners)
-  addOwners(ctx: StateContext<OwnersStateModel>, { entities }: { entities: Owner[] }): void {
+  addOwners(ctx: StateContext<OwnerStateModel>, { entities }: { entities: Owner[] }): void {
     const state = ctx.getState();
 
     const ids = [...new Set([
