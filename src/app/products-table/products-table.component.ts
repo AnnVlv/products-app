@@ -2,14 +2,13 @@ import {Component, OnInit} from '@angular/core';
 import {MatDialog} from '@angular/material/dialog';
 
 import {Observable} from 'rxjs';
-import {Select} from '@ngxs/store';
 
-import {Product} from '../shared/models';
+import {ModalActionType, Product} from '../shared/models';
 import {ToastService} from '../core/services';
 import {DeleteProductModalComponent} from './delete-product-modal/delete-product-modal.component';
-import {AddProductModalComponent} from './add-product-modal/add-product-modal.component';
-import {ProductsService} from '../core/services/products.service';
-import {ProductsStateGetter} from '../state/products/products.getter';
+import {AddEditProductModalComponent} from './add-edit-product-modal/add-edit-product-modal.component';
+import {ProductService} from '../core/services/product.service';
+import {ModalActionTypes} from '../shared/consts/modal-action-types';
 
 
 @Component({
@@ -18,22 +17,20 @@ import {ProductsStateGetter} from '../state/products/products.getter';
   styleUrls: ['./products-table.component.scss']
 })
 export class ProductsTableComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'description', 'price', 'count', 'total', 'delete'];
+  displayedColumns: string[] = ['name', 'description', 'price', 'count', 'total', 'edit', 'delete'];
   total$: Observable<number>;
   products$: Observable<Product[]>;
-  isLoading$: Observable<boolean>;
-
-  @Select(ProductsStateGetter.products) products$4!: Observable<Product[]>;
+  modalActionTypes = ModalActionTypes;
 
   constructor(
     private dialog: MatDialog,
     private toastService: ToastService,
-    private productsService: ProductsService
+    private productService: ProductService
   ) { }
 
   ngOnInit(): void {
-    this.total$ = this.productsService.total$;
-    this.products$ = this.productsService.products$;
+    this.total$ = this.productService.total$;
+    this.products$ = this.productService.products$;
   }
 
   openDeleteModal(id: number): void {
@@ -43,13 +40,17 @@ export class ProductsTableComponent implements OnInit {
     });
   }
 
-  openAddModal(): void {
-    this.dialog.open(AddProductModalComponent, {
-      width: '400px'
+  openAddEditModal(type?: ModalActionType, id?: number): void {
+    this.dialog.open(AddEditProductModalComponent, {
+      width: '400px',
+      data: {
+        modalActionType: type,
+        id
+      }
     });
   }
 
   showError(): void {
-    this.toastService.show(`Showing error... # ${ Math.round(Math.random() * 100) }`);
+    this.toastService.show(`Showing error... # ${Math.round(Math.random() * 100)}`);
   }
 }

@@ -1,20 +1,21 @@
 {
   "products": [
     {
-      "name": "Name 890",
+      "name": "Name 11",
       "description": "Description 1",
       "price": 100,
       "count": 5,
       "id": 1,
-      "ownerId": 1,
+      "ownerId": 2,
+      "total": 500,
       "owner": {
-        "id": 1,
-        "name": "Owner's Name"
+        "id": 2,
+        "name": "Owner"
       }
     },
     {
-      "name": "Name 890",
-      "description": "Description 1",
+      "name": "Name 2",
+      "description": "Description 2",
       "price": 100,
       "count": 5,
       "id": 2,
@@ -25,28 +26,17 @@
       }
     },
     {
-      "name": "Name 890",
-      "description": "Description 1",
-      "price": 100,
-      "count": 5,
+      "ownerId": 1,
+      "name": "asdfasdf345345",
+      "description": "sef",
+      "price": "34",
+      "count": "345",
       "id": 3,
-      "ownerId": 3,
+      "total": 11730,
       "owner": {
-        "id": 3,
-        "name": "Owner's Name"
+        "id": 1,
+        "name": "Owner 1"
       }
-    },
-    {
-      "name": "Name Example",
-      "description": "Description Example",
-      "price": 120,
-      "count": 1,
-      "ownerId": 2,
-      "owner": {
-        "id": 2,
-        "name": "Owner "
-      },
-      "id": 4
     }
   ]
 }

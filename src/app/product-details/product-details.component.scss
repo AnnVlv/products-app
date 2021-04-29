@@ -1,26 +1,9 @@
-.details {
-  display: flex;
+.info {
+  .product {
+    margin-bottom: 14px;
 
-  .info {
-    display: block;
-    width: 30%;
-
-    .product {
-      margin-bottom: 14px;
-
-      .key {
-        font-weight: bold;
-      }
-    }
-  }
-
-  .edit {
-    .edit-button {
-      margin-bottom: 20px;
-    }
-
-    mat-form-field {
-      display: block;
+    .key {
+      font-weight: bold;
     }
   }
 }

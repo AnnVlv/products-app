@@ -1,14 +1,10 @@
 import {Product} from './product.model';
 import {Owner} from './owner.model';
-import {ProductsStateModel} from './products-state.model';
-import {OwnersStateModel} from './owners-state.model';
-import {StateModel} from './state.model';
+import {ModalActionType} from './modal-action-type.model';
 
 
 export {
   Product,
   Owner,
-  ProductsStateModel,
-  OwnersStateModel,
-  StateModel
+  ModalActionType
 };

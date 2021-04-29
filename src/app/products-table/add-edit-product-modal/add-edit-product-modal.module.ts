@@ -1,15 +1,15 @@
 import {NgModule} from '@angular/core';
 
-import {AddProductModalComponent} from './add-product-modal.component';
+import {AddEditProductModalComponent} from './add-edit-product-modal.component';
 import {SharedModule} from '../../shared/shared.module';
 
 
 @NgModule({
   declarations: [
-    AddProductModalComponent
+    AddEditProductModalComponent
   ],
   imports: [
     SharedModule
   ]
 })
-export class AddProductModalModule { }
+export class AddEditProductModalModule { }

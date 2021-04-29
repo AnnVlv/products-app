@@ -12,17 +12,22 @@ export class GetProductById {
 
 export class SetProducts {
   static readonly type = '[Product] Set Products';
-  constructor(public products: Product[]) {}
+  constructor(public entities: Product[]) {}
+}
+
+export class SetSelectedId {
+  static readonly type = '[Product] Set Selected Id';
+  constructor(public id: number) {}
 }
 
 export class AddProduct {
   static readonly type = '[Product] Add Product';
-  constructor(public product: Product) {}
+  constructor(public entity: Product) {}
 }
 
 export class EditProduct {
   static readonly type = '[Product] Edit Product';
-  constructor(public product: Product) {}
+  constructor(public entity: Product) {}
 }
 
 export class DeleteProduct {

@@ -10,13 +10,13 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import('./products-table/products-table.module')
       .then(m => m.ProductsTableModule),
-    resolve: { data: ProductsResolver }
+    resolve: { products: ProductsResolver }
   },
   {
     path: ':id',
     loadChildren: () => import('./product-details/product-details.module')
       .then(m => m.ProductDetailsModule),
-    resolve: { data: ProductResolver }
+    resolve: { product: ProductResolver }
   }
 ];
 

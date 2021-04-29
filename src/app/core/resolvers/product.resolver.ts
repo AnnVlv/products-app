@@ -2,21 +2,21 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
 
 import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import {take} from 'rxjs/operators';
 
-import {ProductsService} from '../services/products.service';
-import {StateModel} from '../../shared/models';
+import {ProductService} from '../services/product.service';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductResolver implements Resolve<Observable<{ state: StateModel, productId: number }>> {
-  constructor(private productsService: ProductsService) { }
+export class ProductResolver implements Resolve<Observable<any>> {
+  constructor(private productsService: ProductService) { }
 
-  resolve(route: ActivatedRouteSnapshot): Observable<{ state: StateModel, productId: number }> {
-    const productId = +route.paramMap.get('id');
-    return this.productsService.getProductById(productId)
-      .pipe(map(state => ({ state, productId })));
+  resolve(route: ActivatedRouteSnapshot): Observable<any> {
+    const productId = Number(route.paramMap.get('id'));
+    this.productsService.getProductById(productId);
+    return this.productsService.selectedProduct$
+      .pipe(take(1));
   }
 }

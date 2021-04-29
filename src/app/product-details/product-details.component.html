@@ -1,42 +1,6 @@
-<div class="details" *appShowSpinner="false">
-  <div class="info">
-    <div class="product" *ngFor="let key of productKeys">
-      <div class="key">{{ key | titlecase }}</div>
-      <div class="value">{{ product[key] }}</div>
-    </div>
-  </div>
-
-  <div class="edit">
-    <div class="edit-button">
-      <button mat-raised-button color="primary" (click)="isEdit = !isEdit" [disabled]="isEdit">Edit Product</button>
-    </div>
-
-    <div class="form-wrapper" *ngIf="isEdit">
-      <form [formGroup]="form">
-        <mat-form-field>
-          <mat-label>Name</mat-label>
-          <input matInput formControlName="name">
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Description</mat-label>
-          <input matInput formControlName="description">
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Price</mat-label>
-          <input matInput formControlName="price">
-        </mat-form-field>
-
-        <mat-form-field>
-          <mat-label>Count</mat-label>
-          <input matInput formControlName="count">
-        </mat-form-field>
-      </form>
-
-      <div>
-        <button mat-raised-button color="primary" (click)="edit()" [disabled]="form.invalid">Save</button>
-      </div>
-    </div>
+<div class="info" *ngIf="product$ | async as product">
+  <div class="product" *ngFor="let key of productsKeysToShow">
+    <div class="key">{{ key | titlecase }}</div>
+    <div class="value">{{ product[key] }}</div>
   </div>
 </div>
