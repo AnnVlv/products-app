@@ -9,6 +9,7 @@ import {ProductService} from '../../../core/services/product.service';
 import {ModalActionType, Owner, Product} from '../../models';
 import {ModalActionTypes} from '../../enums/modal-action-types';
 import {OwnerService} from '../../../core/services/owner.service';
+import {ValidationErrors} from '../../enums/validation-errors.enum';
 
 
 @Component({
@@ -20,6 +21,7 @@ export class AddEditProductModalComponent implements OnInit, OnDestroy {
   actionType: ModalActionType;
   owner: Owner;
   form: FormGroup;
+  validationErrors = ValidationErrors;
   private subscription: Subscription;
 
   constructor(
