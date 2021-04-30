@@ -2,21 +2,24 @@ import {Injectable} from '@angular/core';
 import {Resolve} from '@angular/router';
 
 import {Observable} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {filter, take} from 'rxjs/operators';
+import {IRequest} from 'ngxs-requests-plugin';
 
 import {ProductService} from '../services/product.service';
-import {Product} from '../../shared/models';
 
 
 @Injectable({
   providedIn: 'root'
 })
-export class ProductsResolver implements Resolve<Observable<Product[]>> {
+export class ProductsResolver implements Resolve<Observable<IRequest>> {
   constructor(private productsService: ProductService) { }
 
-  resolve(): Observable<Product[]> {
+  resolve(): Observable<IRequest> {
     this.productsService.getProducts();
-    return this.productsService.products$
-      .pipe(take(1));
+    return this.productsService.productsGetRequestState$
+      .pipe(
+        filter(request => request.loaded),
+        take(1)
+      );
   }
 }

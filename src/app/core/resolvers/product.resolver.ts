@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Resolve} from '@angular/router';
 
 import {Observable} from 'rxjs';
-import {take} from 'rxjs/operators';
+import {filter, take} from 'rxjs/operators';
 
 import {ProductService} from '../services/product.service';
 
@@ -16,7 +16,10 @@ export class ProductResolver implements Resolve<Observable<any>> {
   resolve(route: ActivatedRouteSnapshot): Observable<any> {
     const productId = Number(route.paramMap.get('id'));
     this.productsService.getProductById(productId);
-    return this.productsService.selectedProduct$
-      .pipe(take(1));
+    return this.productsService.productGetRequestState$
+      .pipe(
+        filter(request => request.loaded),
+        take(1)
+      );
   }
 }

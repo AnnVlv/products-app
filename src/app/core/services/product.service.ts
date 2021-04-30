@@ -2,10 +2,12 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 
 import {Select, Store} from '@ngxs/store';
+import {IRequest} from 'ngxs-requests-plugin';
 
 import {ProductStateGetter} from '../../state/product/product.getter';
 import {Product} from '../../shared/models';
-import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts, SetSelectedId} from '../../state/product/product.actions';
+import {AddProduct, DeleteProduct, EditProduct, GetProductById, GetProducts} from '../../state/product/product.actions';
+import {ProductGetRequestState, ProductsGetRequestState} from '../../state/product/poduct.state';
 
 
 @Injectable({
@@ -16,11 +18,10 @@ export class ProductService {
   @Select(ProductStateGetter.total) total$: Observable<number>;
   @Select(ProductStateGetter.selectedProduct) selectedProduct$: Observable<Product>;
 
-  constructor(private store: Store) { }
+  @Select(ProductsGetRequestState) productsGetRequestState$: Observable<IRequest>;
+  @Select(ProductGetRequestState) productGetRequestState$: Observable<IRequest>;
 
-  setSelectedId(id: number): void {
-    this.store.dispatch(new SetSelectedId(id));
-  }
+  constructor(private store: Store) { }
 
   getProducts(): void {
     this.store.dispatch(new GetProducts());
