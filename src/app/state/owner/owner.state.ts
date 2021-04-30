@@ -29,16 +29,16 @@ export interface OwnerStateModel {
 @Injectable()
 export class OwnerState {
   @Action(SetOwners)
-  setOwners(ctx: StateContext<OwnerStateModel>, { entities }: { entities: Owner[] }): void {
+  setOwners(ctx: StateContext<OwnerStateModel>, payload: SetOwners): void {
     const state = ctx.getState();
 
     const ids = [...new Set([
       ...state.ids,
-      ...entities.map(owner => owner.id)
+      ...payload.entities.map(owner => owner.id)
     ])];
 
     const entitiesObj = { ...state.entities };
-    entities.forEach(entity => {
+    payload.entities.forEach(entity => {
       entitiesObj[entity.id] = entity;
     });
 

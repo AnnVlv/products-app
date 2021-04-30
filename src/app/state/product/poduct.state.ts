@@ -45,15 +45,15 @@ export class ProductState {
   ) { }
 
   @Action(SetProducts)
-  setProducts(ctx: StateContext<ProductStateModel>, { entities }: SetProducts): void {
+  setProducts(ctx: StateContext<ProductStateModel>, payload: SetProducts): void {
     const state = ctx.getState();
 
     const ids = [...new Set([
       ...state.ids,
-      ...entities.map(entity => entity.id)
+      ...payload.entities.map(entity => entity.id)
     ])];
 
-    const { owners, newEntities } = entities.reduce<{
+    const { owners, newEntities } = payload.entities.reduce<{
       owners: Owner[],
       newEntities: ProductStateModel['entities']
     }>((acc, product) => {
@@ -88,9 +88,9 @@ export class ProductState {
   }
 
   @Action(SetSelectedId)
-  setSelectedId(ctx: StateContext<ProductStateModel>, { id }: SetSelectedId): void {
+  setSelectedId(ctx: StateContext<ProductStateModel>, payload: SetSelectedId): void {
     ctx.patchState({
-      selectedId: id
+      selectedId: payload.id
     });
   }
 
@@ -104,13 +104,13 @@ export class ProductState {
   }
 
   @Action(GetProductsSuccess)
-  getProductsSuccess(ctx: StateContext<ProductStateModel>, { entities }: GetProductsSuccess): void {
-    ctx.dispatch(new SetProducts(entities));
+  getProductsSuccess(ctx: StateContext<ProductStateModel>, payload: GetProductsSuccess): void {
+    ctx.dispatch(new SetProducts(payload.entities));
   }
 
   @Action(GetProductById)
-  getProductById(ctx: StateContext<ProductStateModel>, { id }: GetProductById): Observable<void> {
-    return this.httpClient.get<Product>(`${ this.URL }/${ id }`).pipe(
+  getProductById(ctx: StateContext<ProductStateModel>, payload: GetProductById): Observable<void> {
+    return this.httpClient.get<Product>(`${ this.URL }/${ payload.id }`).pipe(
       delay(400),
       switchMap(entity => ctx.dispatch(new GetProductByIdSuccess(entity))),
       catchError(() => ctx.dispatch(new GetProductByIdFail()))
@@ -118,28 +118,30 @@ export class ProductState {
   }
 
   @Action(GetProductByIdSuccess)
-  getProductByIdSuccess(ctx: StateContext<ProductStateModel>, { entity }: GetProductByIdSuccess): void {
-    ctx.dispatch(new SetSelectedId(entity.id));
-    ctx.dispatch(new SetProducts([entity]));
+  getProductByIdSuccess(ctx: StateContext<ProductStateModel>, payload: GetProductByIdSuccess): void {
+    ctx.dispatch(new SetSelectedId(payload.entity.id));
+    ctx.dispatch(new SetProducts([payload.entity]));
   }
 
   @Action(AddProduct)
-  addProduct(ctx: StateContext<ProductStateModel>, { entity }: AddProduct): Observable<void> {
-    return this.httpClient.post<Product>(this.URL, { ...entity }).pipe(
+  addProduct(ctx: StateContext<ProductStateModel>, payload: AddProduct): Observable<void> {
+    return this.httpClient.post<Product>(this.URL, { ...payload.entity }).pipe(
       delay(400),
-      switchMap(({ id }) => ctx.dispatch(new AddProductSuccess({ ...entity, id }))),
+      switchMap(({ id }) => ctx.dispatch(new AddProductSuccess({ ...payload.entity, id }))),
       catchError(() => ctx.dispatch(new AddProductFail()))
     );
   }
 
   @Action(AddProductSuccess)
-  addProductSuccess(ctx: StateContext<ProductStateModel>, { entity }: AddProduct): void {
-    ctx.dispatch(new SetProducts([entity]));
+  addProductSuccess(ctx: StateContext<ProductStateModel>, payload: AddProduct): void {
+    ctx.dispatch(new SetProducts([payload.entity]));
   }
 
   @Action(EditProduct)
-  editProduct(ctx: StateContext<ProductStateModel>, { entity }: EditProduct): Observable<void> {
-    return this.httpClient.put<Product>(`${ this.URL }/${ entity.id }`, { ...entity }).pipe(
+  editProduct(ctx: StateContext<ProductStateModel>, payload: EditProduct): Observable<void> {
+    return this.httpClient.put<Product>(`${ this.URL }/${ payload.entity.id }`, {
+      ...payload.entity
+    }).pipe(
       delay(400),
       switchMap(updatedEntity => ctx.dispatch(new EditProductSuccess(updatedEntity))),
       catchError(() => ctx.dispatch(new EditProductFail()))
@@ -147,23 +149,23 @@ export class ProductState {
   }
 
   @Action(EditProductSuccess)
-  editProductSuccess(ctx: StateContext<ProductStateModel>, { entity }: EditProductSuccess): void {
-    ctx.dispatch(new SetProducts([entity]));
+  editProductSuccess(ctx: StateContext<ProductStateModel>, payload: EditProductSuccess): void {
+    ctx.dispatch(new SetProducts([payload.entity]));
   }
 
   @Action(DeleteProduct)
-  deleteProduct(ctx: StateContext<ProductStateModel>, { id }: DeleteProduct): Observable<void> {
-    return this.httpClient.delete<null>(`${ this.URL }/${ id }`).pipe(
+  deleteProduct(ctx: StateContext<ProductStateModel>, payload: DeleteProduct): Observable<void> {
+    return this.httpClient.delete<null>(`${ this.URL }/${ payload.id }`).pipe(
       delay(400),
-      switchMap(() => ctx.dispatch(new DeleteProductSuccess(id))),
+      switchMap(() => ctx.dispatch(new DeleteProductSuccess(payload.id))),
       catchError(() => ctx.dispatch(new DeleteProductFail()))
     );
   }
 
   @Action(DeleteProductSuccess)
-  deleteProductSuccess(ctx: StateContext<ProductStateModel>, { id }: DeleteProduct): void {
+  deleteProductSuccess(ctx: StateContext<ProductStateModel>, payload: DeleteProduct): void {
     const state = ctx.getState();
-    const ids = state.ids.filter(entityId => entityId !== id);
+    const ids = state.ids.filter(entityId => entityId !== payload.id);
     ctx.patchState({ ids });
   }
 }
