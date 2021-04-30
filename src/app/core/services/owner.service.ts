@@ -12,5 +12,5 @@ import {OwnerStateGetter} from '../../state/owner/owner.getter';
 })
 export class OwnerService {
   @Select(OwnerStateGetter.owners) owners$: Observable<Owner[]>;
-  @Select(OwnerStateGetter.defaultOwner) defaultOwner$: Observable<Owner[]>;
+  @Select(OwnerStateGetter.defaultOwner) defaultOwner$: Observable<Owner>;
 }

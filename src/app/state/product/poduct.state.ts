@@ -110,7 +110,6 @@ export class ProductState {
 
   @Action(GetProductById)
   getProductById(ctx: StateContext<ProductStateModel>, { id }: GetProductById): Observable<void> {
-    ctx.dispatch(new SetSelectedId(id));
     return this.httpClient.get<Product>(`${ this.URL }/${ id }`).pipe(
       delay(400),
       switchMap(entity => ctx.dispatch(new GetProductByIdSuccess(entity))),
@@ -120,6 +119,7 @@ export class ProductState {
 
   @Action(GetProductByIdSuccess)
   getProductByIdSuccess(ctx: StateContext<ProductStateModel>, { entity }: GetProductByIdSuccess): void {
+    ctx.dispatch(new SetSelectedId(entity.id));
     ctx.dispatch(new SetProducts([entity]));
   }
 

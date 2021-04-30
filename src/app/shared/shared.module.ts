@@ -6,6 +6,7 @@ import {MaterialModule} from './material/material.module';
 import {ToastModule} from './components/toast/toast.module';
 import {SpinnerModule} from './components/spinner/spinner.module';
 import {ShowSpinnerModule} from './directives/show-spinner/show-spinner.module';
+import {AddEditProductModalModule} from './components/add-edit-product-modal/add-edit-product-modal.module';
 
 
 @NgModule({
@@ -15,7 +16,8 @@ import {ShowSpinnerModule} from './directives/show-spinner/show-spinner.module';
     MaterialModule,
     ToastModule,
     SpinnerModule,
-    ShowSpinnerModule
+    ShowSpinnerModule,
+    AddEditProductModalModule
   ],
   exports: [
     CommonModule,
@@ -23,7 +25,8 @@ import {ShowSpinnerModule} from './directives/show-spinner/show-spinner.module';
     MaterialModule,
     ToastModule,
     SpinnerModule,
-    ShowSpinnerModule
+    ShowSpinnerModule,
+    AddEditProductModalModule
   ]
 })
 export class SharedModule { }

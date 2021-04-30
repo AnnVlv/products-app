@@ -1,14 +1,14 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
-import {iif} from 'rxjs';
-import {map, switchMap, take, tap} from 'rxjs/operators';
+import {iif, Subscription} from 'rxjs';
+import {map, switchMap, tap} from 'rxjs/operators';
 
-import {ProductService} from '../../core/services/product.service';
-import {ModalActionType, Owner, Product} from '../../shared/models';
-import {ModalActionTypes} from '../../shared/consts/modal-action-types';
-import {OwnerService} from '../../core/services/owner.service';
+import {ProductService} from '../../../core/services/product.service';
+import {ModalActionType, Owner, Product} from '../../models';
+import {ModalActionTypes} from '../../consts/modal-action-types';
+import {OwnerService} from '../../../core/services/owner.service';
 
 
 @Component({
@@ -16,11 +16,12 @@ import {OwnerService} from '../../core/services/owner.service';
   templateUrl: './add-edit-product-modal.component.html',
   styleUrls: ['./add-edit-product-modal.component.scss']
 })
-export class AddEditProductModalComponent implements OnInit {
+export class AddEditProductModalComponent implements OnInit, OnDestroy {
   actionType: ModalActionType;
   product: Product;
   owner: Owner;
   form: FormGroup;
+  private subscription: Subscription;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private data: { modalActionType: ModalActionType, id?: number },
@@ -34,21 +35,24 @@ export class AddEditProductModalComponent implements OnInit {
 
     this.productService.setSelectedId(this.data.id);
 
-    this.productService.selectedProduct$
-      .pipe(
-        take(1),
+    this.subscription = iif(() => this.actionType === ModalActionTypes.EDIT,
+      this.productService.selectedProduct$.pipe(
         tap(product => this.product = product),
-        switchMap(() => iif(() => this.actionType === ModalActionTypes.EDIT,
-          this.ownerService.owners$.pipe(
-            map(owners => owners.find(owner => owner.id === this.product.ownerId)),
-            take(1)
-          ),
-          this.ownerService.defaultOwner$
-        )),
-        tap(owner => this.owner = owner as Owner)
-      ).subscribe(() => {});
+        switchMap(() => this.ownerService.owners$.pipe(
+          map(owners => owners.find(owner => owner.id === this.product.ownerId)),
+          tap(owner => this.owner = owner)
+        ))
+      ),
+      this.ownerService.defaultOwner$.pipe(
+        tap(owner => this.owner = owner)
+      )
+    ).subscribe(() => { });
 
     this.buildForm();
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   save(): void {
@@ -67,7 +71,6 @@ export class AddEditProductModalComponent implements OnInit {
   }
 
   close(): void {
-    this.productService.setSelectedId(null);
     this.dialogRef.close();
   }
 
