@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Resolve} from '@angular/router';
 
 import {Observable} from 'rxjs';
-import {filter, take} from 'rxjs/operators';
+import {filter, switchMap, take} from 'rxjs/operators';
 import {IRequest} from 'ngxs-requests-plugin';
 
 import {ProductService} from '../services/product.service';
@@ -16,10 +16,13 @@ export class ProductsResolver implements Resolve<Observable<IRequest>> {
 
   resolve(): Observable<IRequest> {
     this.productsService.getProducts();
-    return this.productsService.productsGetRequestState$
-      .pipe(
+    return this.productsService.productsGetRequestState$.pipe(
+      filter(request => request.loading),
+      take(1),
+      switchMap(() => this.productsService.productsGetRequestState$.pipe(
         filter(request => request.loaded),
         take(1),
-      );
+      )),
+    );
   }
 }

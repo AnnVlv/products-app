@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
-import {Observable} from 'rxjs';
 
+import {Observable} from 'rxjs';
 import {Select, Store} from '@ngxs/store';
 import {IRequest} from 'ngxs-requests-plugin';
 

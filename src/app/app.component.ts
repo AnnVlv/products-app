@@ -16,13 +16,13 @@ export class AppComponent implements OnInit {
   constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
-    combineLatest(
+    combineLatest([
       this.productService.productsGetRequestState$,
       this.productService.productGetRequestState$,
       this.productService.productPostRequestState$,
       this.productService.productPutRequestState$,
       this.productService.productDeleteRequestState$,
-    ).subscribe(requests => {
+    ]).subscribe(requests => {
       this.isShowingSpinner = requests.some(request => request.loading);
     });
   }
