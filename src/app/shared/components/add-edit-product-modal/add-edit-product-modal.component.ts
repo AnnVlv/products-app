@@ -7,9 +7,8 @@ import {map} from 'rxjs/operators';
 
 import {ProductService} from '../../../core/services/product.service';
 import {ModalActionType, Owner, Product} from '../../models';
-import {ModalActionTypes} from '../../enums/modal-action-types';
 import {OwnerService} from '../../../core/services/owner.service';
-import {ValidationErrors} from '../../enums/validation-errors.enum';
+import {ValidationErrors, ModalActionTypes} from '../../enums';
 
 
 @Component({

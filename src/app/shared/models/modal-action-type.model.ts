@@ -1,4 +1,4 @@
-import {ModalActionTypes} from '../enums/modal-action-types';
+import {ModalActionTypes} from '../enums';
 
 
 export type ModalActionType = typeof ModalActionTypes.ADD | typeof ModalActionTypes.EDIT;
