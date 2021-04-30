@@ -4,7 +4,7 @@ import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {delay, mapTo} from 'rxjs/operators';
 import {Action, State, StateContext} from '@ngxs/store';
-import {createRequestAction} from 'ngxs-requests-plugin';
+import {createRequestAction, RequestState} from 'ngxs-requests-plugin';
 
 import {
   AddProduct, AddProductFail, AddProductSuccess,
@@ -18,12 +18,27 @@ import {
 } from './product.actions';
 import {Owner, Product} from '../../shared/models';
 import {SetOwners} from '../owner/owner.actions';
-import {ProductsGetRequestState} from './products-get-request.state';
-import {ProductGetRequestState} from './product-get-request.state';
-import {ProductPostRequestState} from './product-post-request.state';
-import {ProductDeleteRequestState} from './product-delete-request.state';
-import {ProductPutRequestState} from './product-put-request.state';
 
+
+@Injectable()
+@RequestState('productsGetRequest')
+export class ProductsGetRequestState { }
+
+@Injectable()
+@RequestState('productGetRequest')
+export class ProductGetRequestState { }
+
+@Injectable()
+@RequestState('productPostRequest')
+export class ProductPostRequestState { }
+
+@Injectable()
+@RequestState('productPutRequest')
+export class ProductPutRequestState { }
+
+@Injectable()
+@RequestState('productDeleteRequest')
+export class ProductDeleteRequestState { }
 
 export interface ProductStateModel {
   ids: number[];
@@ -32,7 +47,6 @@ export interface ProductStateModel {
   };
   selectedId: number;
 }
-
 
 @State<ProductStateModel>({
   name: 'products',
@@ -158,7 +172,7 @@ export class ProductState {
       state: ProductPutRequestState,
       request,
       successAction: EditProductSuccess,
-      failAction: EditProductFail
+      failAction: EditProductFail,
     }));
   }
 

@@ -4,7 +4,13 @@ import {NgxsModule} from '@ngxs/store';
 import {NgxsRequestsPluginModule} from 'ngxs-requests-plugin';
 
 import {environment} from '../../environments/environment';
-import {ProductState} from './product/poduct.state';
+import {
+  ProductGetRequestState,
+  ProductPostRequestState,
+  ProductPutRequestState,
+  ProductsGetRequestState,
+  ProductState
+} from './product/poduct.state';
 import {OwnerState} from './owner/owner.state';
 import {ProductDeleteRequestState} from './product/product-delete-request.state';
 
@@ -19,6 +25,10 @@ import {ProductDeleteRequestState} from './product/product-delete-request.state'
       developmentMode: !environment.production
     }),
     NgxsRequestsPluginModule.forRoot([
+      ProductsGetRequestState,
+      ProductGetRequestState,
+      ProductPostRequestState,
+      ProductPutRequestState,
       ProductDeleteRequestState
     ])
   ],
