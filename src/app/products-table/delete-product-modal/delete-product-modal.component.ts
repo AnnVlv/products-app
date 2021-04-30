@@ -12,7 +12,7 @@ import {ProductService} from '../../core/services/product.service';
 export class DeleteProductModalComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) private id: number,
-    public dialogRef: MatDialogRef<DeleteProductModalComponent>,
+    private dialogRef: MatDialogRef<DeleteProductModalComponent>,
     private productsService: ProductService
   ) { }
 

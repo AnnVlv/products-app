@@ -9,10 +9,10 @@ import {
   ProductPostRequestState,
   ProductPutRequestState,
   ProductsGetRequestState,
+  ProductDeleteRequestState,
   ProductState
 } from './product/poduct.state';
 import {OwnerState} from './owner/owner.state';
-import {ProductDeleteRequestState} from './product/product-delete-request.state';
 
 
 @NgModule({

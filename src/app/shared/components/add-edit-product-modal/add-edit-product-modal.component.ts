@@ -41,7 +41,7 @@ export class AddEditProductModalComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private product: Product,
-    public dialogRef: MatDialogRef<AddEditProductModalComponent>,
+    private dialogRef: MatDialogRef<AddEditProductModalComponent>,
     private productService: ProductService,
     private ownerService: OwnerService
   ) { }
