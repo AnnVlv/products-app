@@ -5,7 +5,6 @@ import {Observable} from 'rxjs';
 
 import {Product} from '../shared/models';
 import {ProductService} from '../core/services/product.service';
-import {ModalActionTypes} from '../shared/enums/modal-action-types';
 import {AddEditProductModalComponent} from '../shared/components/add-edit-product-modal/add-edit-product-modal.component';
 
 
@@ -30,10 +29,7 @@ export class ProductDetailsComponent implements OnInit {
   openEditModal(id: number): void {
     this.dialog.open(AddEditProductModalComponent, {
       width: '400px',
-      data: {
-        modalActionType: ModalActionTypes.EDIT,
-        id
-      }
+      data: id
     });
   }
 }

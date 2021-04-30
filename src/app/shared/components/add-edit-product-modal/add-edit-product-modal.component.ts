@@ -24,16 +24,16 @@ export class AddEditProductModalComponent implements OnInit, OnDestroy {
   private subscription: Subscription;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private data: { modalActionType: ModalActionType, id?: number },
+    @Inject(MAT_DIALOG_DATA) private id: number,
     public dialogRef: MatDialogRef<AddEditProductModalComponent>,
     private productService: ProductService,
     private ownerService: OwnerService
   ) { }
 
   ngOnInit(): void {
-    this.actionType = this.data.modalActionType;
+    this.actionType = this.id ? ModalActionTypes.EDIT : ModalActionTypes.ADD;
 
-    this.productService.setSelectedId(this.data.id);
+    this.productService.setSelectedId(this.id);
 
     this.subscription = iif(() => this.actionType === ModalActionTypes.EDIT,
       this.productService.selectedProduct$.pipe(

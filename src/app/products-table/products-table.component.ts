@@ -43,10 +43,7 @@ export class ProductsTableComponent implements OnInit {
   openAddEditModal(type?: ModalActionType, id?: number): void {
     this.dialog.open(AddEditProductModalComponent, {
       width: '400px',
-      data: {
-        modalActionType: type,
-        id
-      }
+      data: id
     });
   }
 
