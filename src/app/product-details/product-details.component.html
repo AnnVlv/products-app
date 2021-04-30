@@ -1,6 +1,6 @@
 <div class="info" *ngIf="product$ | async as product">
   <div class="button-block">
-    <button mat-raised-button color="primary" (click)="openEditModal(product.id)">Edit Product</button>
+    <button mat-raised-button color="primary" (click)="openEditModal(product)">Edit Product</button>
   </div>
 
   <div class="product" *ngFor="let key of productsKeysToShow">

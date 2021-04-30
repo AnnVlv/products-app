@@ -3,7 +3,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 
 import {iif, Subscription} from 'rxjs';
-import {map, switchMap, tap} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 
 import {ProductService} from '../../../core/services/product.service';
 import {ModalActionType, Owner, Product} from '../../models';
@@ -18,41 +18,32 @@ import {OwnerService} from '../../../core/services/owner.service';
 })
 export class AddEditProductModalComponent implements OnInit, OnDestroy {
   actionType: ModalActionType;
-  product: Product;
   owner: Owner;
   form: FormGroup;
   private subscription: Subscription;
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) private id: number,
+    @Inject(MAT_DIALOG_DATA) private product: Product,
     public dialogRef: MatDialogRef<AddEditProductModalComponent>,
     private productService: ProductService,
     private ownerService: OwnerService
   ) { }
 
   ngOnInit(): void {
-    this.actionType = this.id ? ModalActionTypes.EDIT : ModalActionTypes.ADD;
-
-    this.productService.setSelectedId(this.id);
+    this.actionType = this.product ? ModalActionTypes.EDIT : ModalActionTypes.ADD;
 
     this.subscription = iif(() => this.actionType === ModalActionTypes.EDIT,
-      this.productService.selectedProduct$.pipe(
-        tap(product => this.product = product),
-        switchMap(() => this.ownerService.owners$.pipe(
-          map(owners => owners.find(owner => owner.id === this.product.ownerId)),
-          tap(owner => this.owner = owner)
-        ))
+      this.ownerService.owners$.pipe(
+        map(owners => owners.find(owner => owner.id === this.product.ownerId))
       ),
-      this.ownerService.defaultOwner$.pipe(
-        tap(owner => this.owner = owner)
-      )
-    ).subscribe(() => { });
+      this.ownerService.defaultOwner$
+    ).subscribe(owner => this.owner = owner);
 
     this.buildForm();
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.subscription?.unsubscribe();
   }
 
   save(): void {

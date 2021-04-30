@@ -26,10 +26,10 @@ export class ProductDetailsComponent implements OnInit {
     this.product$ = this.productsService.selectedProduct$;
   }
 
-  openEditModal(id: number): void {
+  openEditModal(product: Product): void {
     this.dialog.open(AddEditProductModalComponent, {
       width: '400px',
-      data: id
+      data: product
     });
   }
 }

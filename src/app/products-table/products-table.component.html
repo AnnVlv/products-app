@@ -1,6 +1,6 @@
 <ng-container *appShowSpinner="false">
   <div class="button-block">
-    <button mat-raised-button color="primary" (click)="openAddEditModal(modalActionTypes.ADD)">Add Product</button>
+    <button mat-raised-button color="primary" (click)="openAddEditModal()">Add Product</button>
   </div>
   <div class="button-block">
     <button mat-raised-button color="warn" (click)="showError()">Show Error</button>
@@ -38,7 +38,7 @@
           <th mat-header-cell *matHeaderCellDef> </th>
           <td mat-cell *matCellDef="let element">
             <mat-icon aria-hidden="false" aria-label="Example home icon"
-                      (click)="openAddEditModal(modalActionTypes.EDIT, element.id); $event.stopPropagation()">
+                      (click)="openAddEditModal(element); $event.stopPropagation()">
               edit</mat-icon>
           </td>
         </ng-container>
