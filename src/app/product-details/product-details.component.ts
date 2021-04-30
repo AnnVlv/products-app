@@ -5,7 +5,7 @@ import {Observable} from 'rxjs';
 
 import {Product} from '../shared/models';
 import {ProductService} from '../core/services/product.service';
-import {ModalActionTypes} from '../shared/consts/modal-action-types';
+import {ModalActionTypes} from '../shared/enums/modal-action-types';
 import {AddEditProductModalComponent} from '../shared/components/add-edit-product-modal/add-edit-product-modal.component';
 
 

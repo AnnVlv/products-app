@@ -7,7 +7,7 @@ import {map, switchMap, tap} from 'rxjs/operators';
 
 import {ProductService} from '../../../core/services/product.service';
 import {ModalActionType, Owner, Product} from '../../models';
-import {ModalActionTypes} from '../../consts/modal-action-types';
+import {ModalActionTypes} from '../../enums/modal-action-types';
 import {OwnerService} from '../../../core/services/owner.service';
 
 
