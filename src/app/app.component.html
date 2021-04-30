@@ -13,7 +13,7 @@
   </div>
 </div>
 
-<ng-container *ngIf="!isShowingSpinner; else spinnerBlock">
+<ng-container *ngIf="!(isShowingSpinner$ | async); else spinnerBlock">
   <router-outlet></router-outlet>
 </ng-container>
 

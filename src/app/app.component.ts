@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
-import {combineLatest} from 'rxjs';
+import {combineLatest, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
 
 import {ProductService} from './core/services/product.service';
 
@@ -11,19 +12,19 @@ import {ProductService} from './core/services/product.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  isShowingSpinner = false;
+  isShowingSpinner$: Observable<boolean>;
 
   constructor(private productService: ProductService) { }
 
   ngOnInit(): void {
-    combineLatest([
+    this.isShowingSpinner$ = combineLatest([
       this.productService.productsGetRequestState$,
       this.productService.productGetRequestState$,
       this.productService.productPostRequestState$,
       this.productService.productPutRequestState$,
       this.productService.productDeleteRequestState$,
-    ]).subscribe(requests => {
-      this.isShowingSpinner = requests.some(request => request.loading);
-    });
+    ]).pipe(
+      map(requests => requests.some(request => request.loading)),
+    );
   }
 }
