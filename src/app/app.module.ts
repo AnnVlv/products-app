@@ -12,7 +12,7 @@ import {BaseUrlInterceptor} from './core/interceptors/base-url.interceptor';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     BrowserModule,
@@ -20,17 +20,17 @@ import {BaseUrlInterceptor} from './core/interceptors/base-url.interceptor';
     AppRoutingModule,
     BrowserAnimationsModule,
     SharedModule,
-    StateModule
+    StateModule,
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: BaseUrlInterceptor,
-      multi: true
-    }
+      multi: true,
+    },
   ],
   bootstrap: [
-    AppComponent
-  ]
+    AppComponent,
+  ],
 })
 export class AppModule { }

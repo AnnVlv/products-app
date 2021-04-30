@@ -13,9 +13,7 @@ import {ToastService} from '../../../core/services';
 export class ToastComponent implements OnInit {
   message$: Observable<string>;
 
-  constructor(
-    private toastService: ToastService
-  ) { }
+  constructor(private toastService: ToastService) { }
 
   ngOnInit(): void {
     this.message$ = this.toastService.message$;

@@ -23,7 +23,7 @@ export class ShowSpinnerDirective {
   constructor(
     private templateRef: TemplateRef<SpinnerComponent>,
     private viewContainerRef: ViewContainerRef,
-    private componentFactoryResolver: ComponentFactoryResolver
+    private componentFactoryResolver: ComponentFactoryResolver,
   ) {
     this.loadingFactory = this.componentFactoryResolver.resolveComponentFactory(SpinnerComponent);
   }

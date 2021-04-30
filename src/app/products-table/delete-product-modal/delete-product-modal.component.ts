@@ -13,7 +13,7 @@ export class DeleteProductModalComponent {
   constructor(
     @Inject(MAT_DIALOG_DATA) private id: number,
     private dialogRef: MatDialogRef<DeleteProductModalComponent>,
-    private productsService: ProductService
+    private productsService: ProductService,
   ) { }
 
   delete(): void {

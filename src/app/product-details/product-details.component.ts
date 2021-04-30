@@ -29,7 +29,7 @@ export class ProductDetailsComponent implements OnInit {
   openEditModal(product: Product): void {
     this.dialog.open(AddEditProductModalComponent, {
       width: '400px',
-      data: product
+      data: product,
     });
   }
 }

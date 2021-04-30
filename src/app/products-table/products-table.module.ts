@@ -8,12 +8,12 @@ import {DeleteProductModalModule} from './delete-product-modal/delete-product-mo
 
 @NgModule({
   declarations: [
-    ProductsTableComponent
+    ProductsTableComponent,
   ],
   imports: [
     SharedModule,
     ProductsTableRoutingModule,
-    DeleteProductModalModule
-  ]
+    DeleteProductModalModule,
+  ],
 })
 export class ProductsTableModule { }

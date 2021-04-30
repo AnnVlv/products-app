@@ -7,11 +7,11 @@ import {ProductDetailsRoutingModule} from './product-details-routing.module';
 
 @NgModule({
   declarations: [
-    ProductDetailsComponent
+    ProductDetailsComponent,
   ],
   imports: [
     SharedModule,
-    ProductDetailsRoutingModule
-  ]
+    ProductDetailsRoutingModule,
+  ],
 })
 export class ProductDetailsModule { }

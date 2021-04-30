@@ -6,10 +6,10 @@ import {SharedModule} from '../../shared/shared.module';
 
 @NgModule({
   declarations: [
-    DeleteProductModalComponent
+    DeleteProductModalComponent,
   ],
   imports: [
-    SharedModule
-  ]
+    SharedModule,
+  ],
 })
 export class DeleteProductModalModule { }

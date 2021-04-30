@@ -6,13 +6,13 @@ import {ToastComponent} from './toast.component';
 
 @NgModule({
   declarations: [
-    ToastComponent
+    ToastComponent,
   ],
   exports: [
-    ToastComponent
+    ToastComponent,
   ],
   imports: [
-    CommonModule
+    CommonModule,
   ]
 })
 export class ToastModule { }

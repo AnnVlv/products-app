@@ -2,7 +2,6 @@
   display: flex;
   justify-content: space-between;
   padding-bottom: 40px;
-  cursor: pointer;
   outline: none;
 
   .username {
@@ -11,6 +10,7 @@
 
   mat-icon {
     margin-right: 12px;
+    cursor: pointer;
 
     &:last-of-type {
       margin-right: 0;

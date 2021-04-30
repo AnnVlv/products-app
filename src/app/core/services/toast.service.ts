@@ -18,10 +18,10 @@ export class ToastService {
       this.showMessageEvent$.pipe(
         switchMapTo(
           timer(this.time).pipe(
-            mapTo(null)
-          )
-        )
-      )
+            mapTo(null),
+          ),
+        ),
+      ),
     );
   }
 

@@ -12,14 +12,14 @@ import {ToastService} from '../services';
 export class BaseUrlInterceptor implements HttpInterceptor {
   BASE_URL = environment.BASE_URL;
 
-  constructor(private toastService: ToastService) {}
+  constructor(private toastService: ToastService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const newRequest = request.clone({
       url: `${ this.BASE_URL }/${ request.url }`
     });
     return next.handle(newRequest)
-      .pipe(catchError((error) => {
+      .pipe(catchError(error => {
         this.toastService.show(`Something went wrong`);
         return throwError(error.message);
       }));

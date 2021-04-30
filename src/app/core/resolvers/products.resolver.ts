@@ -19,7 +19,7 @@ export class ProductsResolver implements Resolve<Observable<IRequest>> {
     return this.productsService.productsGetRequestState$
       .pipe(
         filter(request => request.loaded),
-        take(1)
+        take(1),
       );
   }
 }

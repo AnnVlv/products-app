@@ -4,5 +4,5 @@ import {Owner} from './owner.model';
 
 export {
   Product,
-  Owner
+  Owner,
 };

@@ -21,7 +21,7 @@ export class AppComponent implements OnInit {
       this.productService.productGetRequestState$,
       this.productService.productPostRequestState$,
       this.productService.productPutRequestState$,
-      this.productService.productDeleteRequestState$
+      this.productService.productDeleteRequestState$,
     ).subscribe(requests => {
       this.isShowingSpinner = requests.some(request => request.loading);
     });

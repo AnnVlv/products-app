@@ -1,22 +1,22 @@
 import {NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
 
 import {AddEditProductModalComponent} from './add-edit-product-modal.component';
 import {MaterialModule} from '../../material/material.module';
-import {ReactiveFormsModule} from '@angular/forms';
 
 
 @NgModule({
   declarations: [
-    AddEditProductModalComponent
+    AddEditProductModalComponent,
   ],
   imports: [
     CommonModule,
     MaterialModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [
-    AddEditProductModalComponent
-  ]
+    AddEditProductModalComponent,
+  ],
 })
 export class AddEditProductModalModule { }

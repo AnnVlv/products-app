@@ -6,13 +6,13 @@ import {MaterialModule} from '../../material/material.module';
 
 @NgModule({
   declarations: [
-    SpinnerComponent
+    SpinnerComponent,
   ],
   imports: [
-    MaterialModule
+    MaterialModule,
   ],
   exports: [
-    SpinnerComponent
-  ]
+    SpinnerComponent,
+  ],
 })
 export class SpinnerModule { }

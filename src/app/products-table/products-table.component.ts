@@ -23,7 +23,7 @@ export class ProductsTableComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private toastService: ToastService,
-    private productService: ProductService
+    private productService: ProductService,
   ) { }
 
   ngOnInit(): void {
@@ -34,14 +34,14 @@ export class ProductsTableComponent implements OnInit {
   openDeleteModal(id: number): void {
     this.dialog.open(DeleteProductModalComponent, {
       width: '250px',
-      data: id
+      data: id,
     });
   }
 
   openAddEditModal(product?: Product): void {
     this.dialog.open(AddEditProductModalComponent, {
       width: '400px',
-      data: product
+      data: product,
     });
   }
 

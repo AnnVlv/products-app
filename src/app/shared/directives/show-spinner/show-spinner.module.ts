@@ -4,16 +4,15 @@ import {CommonModule} from '@angular/common';
 import {ShowSpinnerDirective} from './show-spinner.directive';
 
 
-
 @NgModule({
   declarations: [
-    ShowSpinnerDirective
+    ShowSpinnerDirective,
   ],
   imports: [
-    CommonModule
+    CommonModule,
   ],
   exports: [
-    ShowSpinnerDirective
-  ]
+    ShowSpinnerDirective,
+  ],
 })
 export class ShowSpinnerModule { }

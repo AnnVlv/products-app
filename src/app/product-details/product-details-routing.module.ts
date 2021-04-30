@@ -9,16 +9,18 @@ const routes: Routes = [
   {
     path: '',
     component: ProductDetailsComponent,
-    resolve: { product: ProductResolver }
-  }
+    resolve: {
+      product: ProductResolver,
+    },
+  },
 ];
 
 @NgModule({
   imports: [
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
   ],
   exports: [
-    RouterModule
-  ]
+    RouterModule,
+  ],
 })
 export class ProductDetailsRoutingModule { }

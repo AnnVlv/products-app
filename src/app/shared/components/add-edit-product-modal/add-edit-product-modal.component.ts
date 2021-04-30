@@ -18,9 +18,9 @@ import {ValidationErrors} from '../../enums';
 })
 export class AddEditProductModalComponent implements OnInit, OnDestroy {
   isEditMode: boolean;
-  owner: Owner;
   form: FormGroup;
   validationErrors = ValidationErrors;
+  private owner: Owner;
   private subscription: Subscription;
 
   get nameControl(): FormControl {
@@ -43,7 +43,7 @@ export class AddEditProductModalComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) private product: Product,
     private dialogRef: MatDialogRef<AddEditProductModalComponent>,
     private productService: ProductService,
-    private ownerService: OwnerService
+    private ownerService: OwnerService,
   ) { }
 
   ngOnInit(): void {
@@ -68,7 +68,7 @@ export class AddEditProductModalComponent implements OnInit, OnDestroy {
       ...this.product,
       owner: { ...this.owner },
       ownerId: this.owner.id,
-      ...this.form.value
+      ...this.form.value,
     };
     if (this.isEditMode) {
       this.productService.editProduct(product);
@@ -86,8 +86,16 @@ export class AddEditProductModalComponent implements OnInit, OnDestroy {
     this.form = new FormGroup({
       name: new FormControl(null, Validators.required),
       description: new FormControl(null, Validators.required),
-      price: new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(0)]),
-      count: new FormControl(null, [Validators.required, Validators.pattern('^[0-9]*$'), Validators.min(1)])
+      price: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+        Validators.min(0),
+      ]),
+      count: new FormControl(null, [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+        Validators.min(1),
+      ]),
     });
     this.form.patchValue(this.product);
   }

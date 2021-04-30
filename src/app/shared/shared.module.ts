@@ -17,7 +17,7 @@ import {AddEditProductModalModule} from './components/add-edit-product-modal/add
     ToastModule,
     SpinnerModule,
     ShowSpinnerModule,
-    AddEditProductModalModule
+    AddEditProductModalModule,
   ],
   exports: [
     CommonModule,
@@ -26,7 +26,7 @@ import {AddEditProductModalModule} from './components/add-edit-product-modal/add
     ToastModule,
     SpinnerModule,
     ShowSpinnerModule,
-    AddEditProductModalModule
-  ]
+    AddEditProductModalModule,
+  ],
 })
 export class SharedModule { }
