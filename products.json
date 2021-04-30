@@ -6,20 +6,21 @@
       "price": 100,
       "count": 5,
       "id": 1,
-      "ownerId": 2,
+      "ownerId": 1,
       "total": 500,
       "owner": {
-        "id": 2,
-        "name": "Owner"
+        "id": 1,
+        "name": "Owner 1"
       }
     },
     {
-      "name": "Name 2",
+      "name": "Name 20565764864",
       "description": "Description 2",
       "price": 100,
       "count": 5,
       "id": 2,
       "ownerId": 2,
+      "total": 500,
       "owner": {
         "id": 2,
         "name": "Owner's Name"
@@ -27,12 +28,12 @@
     },
     {
       "ownerId": 1,
-      "name": "asdfasdf345345",
-      "description": "sef",
+      "name": "drg7575",
+      "description": "drg97667",
       "price": "34",
-      "count": "345",
+      "count": "345435",
       "id": 3,
-      "total": 11730,
+      "total": 11948523763215,
       "owner": {
         "id": 1,
         "name": "Owner 1"

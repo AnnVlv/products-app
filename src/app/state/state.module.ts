@@ -1,10 +1,12 @@
 import {NgModule} from '@angular/core';
 
 import {NgxsModule} from '@ngxs/store';
+import {NgxsRequestsPluginModule} from 'ngxs-requests-plugin';
 
 import {environment} from '../../environments/environment';
 import {ProductState} from './product/poduct.state';
 import {OwnerState} from './owner/owner.state';
+import {ProductDeleteRequestState} from './product/product-delete-request.state';
 
 
 @NgModule({
@@ -15,7 +17,10 @@ import {OwnerState} from './owner/owner.state';
       OwnerState
     ], {
       developmentMode: !environment.production
-    })
+    }),
+    NgxsRequestsPluginModule.forRoot([
+      ProductDeleteRequestState
+    ])
   ],
   exports: [
     NgxsModule

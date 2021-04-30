@@ -29,7 +29,7 @@ export interface OwnerStateModel {
 @Injectable()
 export class OwnerState {
   @Action(SetOwners)
-  addOwners(ctx: StateContext<OwnerStateModel>, { entities }: { entities: Owner[] }): void {
+  setOwners(ctx: StateContext<OwnerStateModel>, { entities }: { entities: Owner[] }): void {
     const state = ctx.getState();
 
     const ids = [...new Set([
@@ -37,17 +37,10 @@ export class OwnerState {
       ...entities.map(owner => owner.id)
     ])];
 
-    const newEntitiesArr = entities.map(owner => ({
-      [owner.id]: owner
-    }));
-
-    const entitiesObj = newEntitiesArr.reduce((acc, owner) => {
-      const id = Object.keys(owner).find(key => ids.includes(+key));
-      return {
-        ...acc,
-        [id]: owner[id]
-      };
-    }, {});
+    const entitiesObj = { ...state.entities };
+    entities.forEach(entity => {
+      entitiesObj[entity.id] = entity;
+    });
 
     ctx.patchState({
       ids,
