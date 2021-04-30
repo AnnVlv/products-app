@@ -2,8 +2,9 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 
 import {Observable} from 'rxjs';
-import {catchError, delay, switchMap} from 'rxjs/operators';
+import {delay, mapTo} from 'rxjs/operators';
 import {Action, State, StateContext} from '@ngxs/store';
+import {createRequestAction} from 'ngxs-requests-plugin';
 
 import {
   AddProduct, AddProductFail, AddProductSuccess,
@@ -17,6 +18,11 @@ import {
 } from './product.actions';
 import {Owner, Product} from '../../shared/models';
 import {SetOwners} from '../owner/owner.actions';
+import {ProductsGetRequestState} from './products-get-request.state';
+import {ProductGetRequestState} from './product-get-request.state';
+import {ProductPostRequestState} from './product-post-request.state';
+import {ProductDeleteRequestState} from './product-delete-request.state';
+import {ProductPutRequestState} from './product-put-request.state';
 
 
 export interface ProductStateModel {
@@ -96,11 +102,13 @@ export class ProductState {
 
   @Action(GetProducts)
   getProducts(ctx: StateContext<ProductStateModel>): Observable<void> {
-    return this.httpClient.get<Product[]>(this.URL).pipe(
-      delay(400),
-      switchMap(entities => ctx.dispatch(new GetProductsSuccess(entities))),
-      catchError(() => ctx.dispatch(new GetProductsFail()))
-    );
+    const request = this.httpClient.get<Product[]>(this.URL).pipe(delay(400));
+    return ctx.dispatch(createRequestAction({
+      state: ProductsGetRequestState,
+      request,
+      successAction: GetProductsSuccess,
+      failAction: GetProductsFail
+    }));
   }
 
   @Action(GetProductsSuccess)
@@ -110,11 +118,13 @@ export class ProductState {
 
   @Action(GetProductById)
   getProductById(ctx: StateContext<ProductStateModel>, payload: GetProductById): Observable<void> {
-    return this.httpClient.get<Product>(`${ this.URL }/${ payload.id }`).pipe(
-      delay(400),
-      switchMap(entity => ctx.dispatch(new GetProductByIdSuccess(entity))),
-      catchError(() => ctx.dispatch(new GetProductByIdFail()))
-    );
+    const request = this.httpClient.get<Product>(`${ this.URL }/${ payload.id }`).pipe(delay(400));
+    return ctx.dispatch(createRequestAction({
+      state: ProductGetRequestState,
+      request,
+      successAction: GetProductByIdSuccess,
+      failAction: GetProductByIdFail
+    }));
   }
 
   @Action(GetProductByIdSuccess)
@@ -125,11 +135,13 @@ export class ProductState {
 
   @Action(AddProduct)
   addProduct(ctx: StateContext<ProductStateModel>, payload: AddProduct): Observable<void> {
-    return this.httpClient.post<Product>(this.URL, { ...payload.entity }).pipe(
-      delay(400),
-      switchMap(({ id }) => ctx.dispatch(new AddProductSuccess({ ...payload.entity, id }))),
-      catchError(() => ctx.dispatch(new AddProductFail()))
-    );
+    const request = this.httpClient.post<Product>(this.URL, { ...payload.entity }).pipe(delay(400));
+    return ctx.dispatch(createRequestAction({
+      state: ProductPostRequestState,
+      request,
+      successAction: AddProductSuccess,
+      failAction: AddProductFail
+    }));
   }
 
   @Action(AddProductSuccess)
@@ -139,13 +151,15 @@ export class ProductState {
 
   @Action(EditProduct)
   editProduct(ctx: StateContext<ProductStateModel>, payload: EditProduct): Observable<void> {
-    return this.httpClient.put<Product>(`${ this.URL }/${ payload.entity.id }`, {
+    const request = this.httpClient.put<Product>(`${ this.URL }/${ payload.entity.id }`, {
       ...payload.entity
-    }).pipe(
-      delay(400),
-      switchMap(updatedEntity => ctx.dispatch(new EditProductSuccess(updatedEntity))),
-      catchError(() => ctx.dispatch(new EditProductFail()))
-    );
+    }).pipe(delay(400));
+    return ctx.dispatch(createRequestAction({
+      state: ProductPutRequestState,
+      request,
+      successAction: EditProductSuccess,
+      failAction: EditProductFail
+    }));
   }
 
   @Action(EditProductSuccess)
@@ -155,11 +169,16 @@ export class ProductState {
 
   @Action(DeleteProduct)
   deleteProduct(ctx: StateContext<ProductStateModel>, payload: DeleteProduct): Observable<void> {
-    return this.httpClient.delete<null>(`${ this.URL }/${ payload.id }`).pipe(
+    const request = this.httpClient.delete<null>(`${ this.URL }/${ payload.id }`).pipe(
       delay(400),
-      switchMap(() => ctx.dispatch(new DeleteProductSuccess(payload.id))),
-      catchError(() => ctx.dispatch(new DeleteProductFail()))
+      mapTo(payload.id)
     );
+    return ctx.dispatch(createRequestAction({
+      state: ProductDeleteRequestState,
+      request,
+      successAction: DeleteProductSuccess,
+      failAction: DeleteProductFail
+    }));
   }
 
   @Action(DeleteProductSuccess)

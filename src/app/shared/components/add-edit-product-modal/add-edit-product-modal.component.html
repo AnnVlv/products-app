@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{ actionType | titlecase }} Product</h1>
+<h1 mat-dialog-title>{{ isEditMode ? 'Edit' : 'Add' }} Product</h1>
 
 <div mat-dialog-content>
   <form [formGroup]="form">

@@ -8,9 +8,8 @@ import {map} from 'rxjs/operators';
 import {ProductService} from '../../../core/services/product.service';
 import {Owner, Product} from '../../models';
 import {OwnerService} from '../../../core/services/owner.service';
-import {ValidationErrors, ModalActionTypes} from '../../enums';
+import {ValidationErrors} from '../../enums';
 
-export type actionType = 'add' | 'edit';
 
 @Component({
   selector: 'app-add-product-modal',
@@ -18,7 +17,7 @@ export type actionType = 'add' | 'edit';
   styleUrls: ['./add-edit-product-modal.component.scss']
 })
 export class AddEditProductModalComponent implements OnInit, OnDestroy {
-  actionType: actionType;
+  isEditMode: boolean;
   owner: Owner;
   form: FormGroup;
   validationErrors = ValidationErrors;
@@ -48,9 +47,9 @@ export class AddEditProductModalComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.actionType = this.product ? 'edit' : 'add';
+    this.isEditMode = !!this.product;
 
-    this.subscription = iif(() => this.actionType === 'edit',
+    this.subscription = iif(() => this.isEditMode,
       this.ownerService.owners$.pipe(
         map(owners => owners.find(owner => owner.id === this.product.ownerId))
       ),
@@ -71,7 +70,7 @@ export class AddEditProductModalComponent implements OnInit, OnDestroy {
       ownerId: this.owner.id,
       ...this.form.value
     };
-    if (this.actionType === ModalActionTypes.EDIT) {
+    if (this.isEditMode) {
       this.productService.editProduct(product);
     } else {
       this.productService.addProduct(product);
