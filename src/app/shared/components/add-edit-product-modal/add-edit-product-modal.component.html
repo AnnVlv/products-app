@@ -4,35 +4,35 @@
   <form [formGroup]="form">
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input matInput formControlName="name">
+      <input matInput [formControl]="nameControl">
       <mat-error>
-        {{ form.controls['name'].errors?.required && validationErrors.required }}
+        {{ nameControl.errors?.required && validationErrors.required }}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Description</mat-label>
-      <input matInput formControlName="description">
+      <input matInput [formControl]="descriptionControl">
       <mat-error>
-        {{ form.controls['description'].errors?.required && validationErrors.required }}
+        {{ descriptionControl.errors?.required && validationErrors.required }}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Price</mat-label>
-      <input matInput formControlName="price">
+      <input matInput [formControl]="priceControl">
       <mat-error>
-        {{ form.controls['price'].errors?.required && validationErrors.required }}
-        {{ form.controls['price'].errors?.pattern && validationErrors.patternNumbersOnly }}
+        {{ priceControl.errors?.required && validationErrors.required }}
+        {{ priceControl.errors?.pattern && validationErrors.patternNumbersOnly }}
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Count</mat-label>
-      <input matInput formControlName="count">
+      <input matInput [formControl]="countControl">
       <mat-error>
-        {{ form.controls['count'].errors?.required && validationErrors.required }}
-        {{ form.controls['count'].errors?.pattern && validationErrors.patternNumbersOnly }}
+        {{ countControl.errors?.required && validationErrors.required }}
+        {{ countControl.errors?.pattern && validationErrors.patternNumbersOnly }}
       </mat-error>
     </mat-form-field>
   </form>

@@ -6,10 +6,11 @@ import {iif, Subscription} from 'rxjs';
 import {map} from 'rxjs/operators';
 
 import {ProductService} from '../../../core/services/product.service';
-import {ModalActionType, Owner, Product} from '../../models';
+import {Owner, Product} from '../../models';
 import {OwnerService} from '../../../core/services/owner.service';
 import {ValidationErrors, ModalActionTypes} from '../../enums';
 
+export type actionType = 'add' | 'edit';
 
 @Component({
   selector: 'app-add-product-modal',
@@ -17,11 +18,27 @@ import {ValidationErrors, ModalActionTypes} from '../../enums';
   styleUrls: ['./add-edit-product-modal.component.scss']
 })
 export class AddEditProductModalComponent implements OnInit, OnDestroy {
-  actionType: ModalActionType;
+  actionType: actionType;
   owner: Owner;
   form: FormGroup;
   validationErrors = ValidationErrors;
   private subscription: Subscription;
+
+  get nameControl(): FormControl {
+    return this.form.get('name') as FormControl;
+  }
+
+  get descriptionControl(): FormControl {
+    return this.form.get('description') as FormControl;
+  }
+
+  get priceControl(): FormControl {
+    return this.form.get('price') as FormControl;
+  }
+
+  get countControl(): FormControl {
+    return this.form.get('count') as FormControl;
+  }
 
   constructor(
     @Inject(MAT_DIALOG_DATA) private product: Product,
@@ -31,9 +48,9 @@ export class AddEditProductModalComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.actionType = this.product ? ModalActionTypes.EDIT : ModalActionTypes.ADD;
+    this.actionType = this.product ? 'edit' : 'add';
 
-    this.subscription = iif(() => this.actionType === ModalActionTypes.EDIT,
+    this.subscription = iif(() => this.actionType === 'edit',
       this.ownerService.owners$.pipe(
         map(owners => owners.find(owner => owner.id === this.product.ownerId))
       ),
